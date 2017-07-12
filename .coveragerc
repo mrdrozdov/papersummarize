@@ -1,0 +1,3 @@
+[run]
+source = pyramid_wiki
+omit = pyramid_wiki/test*
