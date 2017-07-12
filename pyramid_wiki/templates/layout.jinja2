@@ -33,6 +33,15 @@
           </div>
           <div class="col-md-10">
             <div class="content">
+            {% if request.user is none %}
+            <p class="pull-right">
+            <a href="{{ request.route_url('login') }}">Login</a>
+            </p>
+            {% else %}
+            <p class="pull-right">
+            {{request.user.name}} <a href="{{request.route_url('logout')}}">Logout</a>
+            </p>
+            {% endif %}
             {% block content %}{% endblock %}
             </div>
           </div>
