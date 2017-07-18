@@ -31,3 +31,11 @@ Getting Started
 - Run your project.
 
     env/bin/pserve development.ini
+
+
+FAQ
+---
+
+- Q: Where did this code find inspiration?
+
+    https://docs.pylonsproject.org/projects/pyramid/en/latest/tutorials/wiki/authorization.html

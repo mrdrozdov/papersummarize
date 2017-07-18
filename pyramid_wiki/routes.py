@@ -14,6 +14,7 @@ def includeme(config):
     config.add_route('view_wiki', '/')
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
+    config.add_route('summarize', '/summarize')
     config.add_route('view_page', '/{pagename}', factory=page_factory)
     config.add_route('add_page', '/add_page/{pagename}',
                      factory=new_page_factory)
