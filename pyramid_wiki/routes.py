@@ -14,13 +14,28 @@ def includeme(config):
     config.add_route('view_wiki', '/')
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
-    config.add_route('summarize', '/summarize')
+    config.add_route('summarize', '/summarize',
+                     factory=new_summary_factory)
     config.add_route('view_page', '/{pagename}', factory=page_factory)
     config.add_route('add_page', '/add_page/{pagename}',
                      factory=new_page_factory)
     config.add_route('edit_page', '/{pagename}/edit_page',
                      factory=page_factory)
 
+def new_summary_factory(request):
+    article_id = 'invalid_id'
+    return NewSummary(article_id)
+
+class NewSummary(object):
+    def __init__(self, article_id):
+        self.article_id = article_id
+
+    def __acl__(self):
+        return [
+            (Allow, 'role:editor', 'create'),
+            (Allow, 'role:basic', 'create'),
+        ]
+          
 def new_page_factory(request):
     pagename = request.matchdict['pagename']
     if request.dbsession.query(Page).filter_by(name=pagename).count() > 0:
