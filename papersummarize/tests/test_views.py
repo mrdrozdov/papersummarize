@@ -166,24 +166,3 @@ class EditPageTests(BaseTest):
         response = self._callFUT(request)
         self.assertEqual(response.location, 'http://example.com/abc')
         self.assertEqual(page.data, 'Hello yo!')
-
-
-# Summaries
-
-
-class SummarizeTests(unittest.TestCase):
-    def setUp(self):
-        self.config = testing.setUp()
-        self.config.include('..routes')
-
-    def tearDown(self):
-        testing.tearDown()
-
-    def _callFUT(self, request):
-        from papersummarize.views.summaries import summarize
-        return summarize(request)
-
-    def test_it(self):
-        request = testing.DummyRequest()
-        response = self._callFUT(request)
-        self.assertEqual(response.location, 'http://example.com/summarize')
