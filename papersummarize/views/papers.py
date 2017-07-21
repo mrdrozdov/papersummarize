@@ -6,6 +6,8 @@ from pyramid.httpexceptions import HTTPFound
 
 from pyramid.view import view_config
 
+from ..models import Summary
+
 @view_config(route_name='view_paper', renderer='../templates/paper.jinja2',
              permission='view')
 def view_paper(request):
@@ -17,7 +19,11 @@ def view_paper(request):
 def add_summary(request):
     paper = request.context.paper
     if 'form.submitted' in request.params:
-        raise NotImplementedError()
+        body = request.params['body']
+        summary = Summary(creator=request.user, paper=paper, data=body)
+        request.dbsession.add(summary)
+        next_url = request.route_url('edit_summary', arxiv_id=paper.arxiv_id)
+        return HTTPFound(location=next_url)
     save_url = request.route_url('add_summary', arxiv_id=paper.arxiv_id)
     return dict(paper=paper, save_url=save_url)
 
@@ -26,8 +32,9 @@ def add_summary(request):
 def edit_summary(request):
     summary = request.context.summary
     paper = summary.paper
-    summarydata = summary.data
     if 'form.submitted' in request.params:
-        raise NotImplementedError()
+        summary.data = request.params['body']
+        next_url = request.route_url('edit_summary', arxiv_id=paper.arxiv_id)
+        return HTTPFound(location=next_url)
     save_url = request.route_url('edit_summary', arxiv_id=paper.arxiv_id)
-    return dict(paper=paper, summarydata=summarydata, save_url=save_url)
+    return dict(paper=paper, summarydata=summary.data, save_url=save_url)

@@ -13,8 +13,8 @@ class Summary(Base):
     """ The SQLAlchemy declarative model class for a Summary object. """
     __tablename__ = 'summaries'
     id = Column(Integer, primary_key=True)
-    paper_id = Column(ForeignKey('papers.id'), nullable=False, unique=True)
-    creator_id = Column(ForeignKey('users.id'), nullable=False, unique=True)
+    paper_id = Column(ForeignKey('papers.id'), nullable=False)
+    creator_id = Column(ForeignKey('users.id'), nullable=False)
 
     data = Column(Text, nullable=False)
 
