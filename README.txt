@@ -1,12 +1,12 @@
-pyramid-wiki
-============
+papersummarize
+==============
 
 Getting Started
 ---------------
 
 - Change directory into your newly created project.
 
-    cd pyramid_wiki
+    cd papersummarize
 
 - Create a Python virtual environment.
 
@@ -22,7 +22,7 @@ Getting Started
 
 - Configure the database.
 
-    env/bin/initialize_pyramid_wiki_db development.ini
+    env/bin/initialize_papersummarize_db development.ini
 
 - Run your project's tests.
 

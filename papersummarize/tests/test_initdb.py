@@ -12,5 +12,5 @@ class TestInitializeDB(unittest.TestCase):
     def test_run(self):
         from ..scripts.initializedb import main
         main(argv=['foo', 'development.ini'])
-        self.assertTrue(os.path.exists('pyramid_wiki.sqlite'))
-        os.remove('pyramid_wiki.sqlite')
+        self.assertTrue(os.path.exists('papersummarize.sqlite'))
+        os.remove('papersummarize.sqlite')

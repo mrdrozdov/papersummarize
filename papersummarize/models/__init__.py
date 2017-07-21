@@ -56,7 +56,7 @@ def includeme(config):
     """
     Initialize the model for a Pyramid app.
 
-    Activate this setup using ``config.include('pyramid_wiki.models')``.
+    Activate this setup using ``config.include('papersummarize.models')``.
 
     """
     settings = config.get_settings()

@@ -20,13 +20,13 @@ class FunctionalTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        from pyramid_wiki.models.meta import Base
-        from pyramid_wiki.models import (
+        from papersummarize.models.meta import Base
+        from papersummarize.models import (
             User,
             Page,
             get_tm_session,
         )
-        from pyramid_wiki import main
+        from papersummarize import main
 
         settings = {
             'sqlalchemy.url': 'sqlite://',
@@ -53,7 +53,7 @@ class FunctionalTests(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        from pyramid_wiki.models.meta import Base
+        from papersummarize.models.meta import Base
         Base.metadata.drop_all(bind=cls.engine)
 
     def test_root(self):
