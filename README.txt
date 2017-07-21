@@ -39,3 +39,7 @@ FAQ
 - Q: Where did this code find inspiration?
 
     https://docs.pylonsproject.org/projects/pyramid/en/latest/tutorials/wiki/authorization.html
+
+- Q: Where did this idea find inspiration?
+
+    https://github.com/zakird/revsub
