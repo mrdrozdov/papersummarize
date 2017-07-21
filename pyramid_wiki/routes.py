@@ -14,8 +14,7 @@ def includeme(config):
     config.add_route('view_wiki', '/')
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
-    config.add_route('summarize', '/summarize',
-                     factory=new_summary_factory)
+    config.add_route('add_summary', '/s/{arxiv_id}', factory=new_summary_factory)
     config.add_route('view_paper', '/x/{arxiv_id}', factory=arxiv_factory)
     config.add_route('view_page', '/{pagename}', factory=page_factory)
     config.add_route('add_page', '/add_page/{pagename}',
@@ -24,12 +23,15 @@ def includeme(config):
                      factory=page_factory)
 
 def new_summary_factory(request):
-    article_id = 'invalid_id'
-    return NewSummary(article_id)
+    arxiv_id = request.matchdict['arxiv_id']
+    paper = request.dbsession.query(Paper).filter_by(arxiv_id=arxiv_id).first()
+    if paper is None:
+        raise HTTPNotFound
+    return NewSummary(paper)
 
 class NewSummary(object):
-    def __init__(self, article_id):
-        self.article_id = article_id
+    def __init__(self, paper):
+        self.paper = paper
 
     def __acl__(self):
         return [

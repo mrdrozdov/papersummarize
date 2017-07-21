@@ -11,3 +11,12 @@ from pyramid.view import view_config
 def view_paper(request):
     paper = request.context.paper
     return dict(paper=paper)
+
+@view_config(route_name='add_summary', renderer='../templates/add_summary.jinja2',
+             permission='create')
+def add_summary(request):
+    paper = request.context.paper
+    if 'form.submitted' in request.params:
+        raise NotImplementedError()
+    save_url = request.route_url('add_summary', arxiv_id=paper.arxiv_id)
+    return dict(paper=paper, save_url=save_url)
