@@ -51,7 +51,8 @@ def summary_factory(request):
         raise HTTPNotFound
     summary = request.dbsession.query(Summary).filter_by(creator=request.user, paper=paper).first()
     if summary is None:
-        raise HTTPNotFound
+        next_url = request.route_url('add_summary', arxiv_id=paper.arxiv_id)
+        raise HTTPFound(location=next_url)
     return SummaryResource(summary)
 
 class SummaryResource(object):
