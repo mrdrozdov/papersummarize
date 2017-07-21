@@ -28,7 +28,7 @@ def new_summary_factory(request):
     paper = request.dbsession.query(Paper).filter_by(arxiv_id=arxiv_id).first()
     if paper is None:
         raise HTTPNotFound
-    summary = request.dbsession.query(Summary).filter_by(paper=paper).first()
+    summary = request.dbsession.query(Summary).filter_by(creator=request.user, paper=paper).first()
     if summary is not None:
         next_url = request.route_url('edit_summary', arxiv_id=paper.arxiv_id)
         raise HTTPFound(location=next_url)
@@ -49,7 +49,7 @@ def summary_factory(request):
     paper = request.dbsession.query(Paper).filter_by(arxiv_id=arxiv_id).first()
     if paper is None:
         raise HTTPNotFound
-    summary = request.dbsession.query(Summary).filter_by(paper=paper).first()
+    summary = request.dbsession.query(Summary).filter_by(creator=request.user, paper=paper).first()
     if summary is None:
         raise HTTPNotFound
     return SummaryResource(summary)
