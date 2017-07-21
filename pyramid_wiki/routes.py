@@ -7,7 +7,7 @@ from pyramid.security import (
     Everyone,
 )
 
-from .models import Page
+from .models import Page, Paper
 
 def includeme(config):
     config.add_static_view('static', 'static', cache_max_age=3600)
@@ -16,6 +16,7 @@ def includeme(config):
     config.add_route('logout', '/logout')
     config.add_route('summarize', '/summarize',
                      factory=new_summary_factory)
+    config.add_route('view_paper', '/x/{arxiv_id}', factory=arxiv_factory)
     config.add_route('view_page', '/{pagename}', factory=page_factory)
     config.add_route('add_page', '/add_page/{pagename}',
                      factory=new_page_factory)
@@ -69,4 +70,20 @@ class PageResource(object):
             (Allow, Everyone, 'view'),
             (Allow, 'role:editor', 'edit'),
             (Allow, str(self.page.creator_id), 'edit'),
+        ]
+
+def arxiv_factory(request):
+    arxiv_id = request.matchdict['arxiv_id']
+    paper = request.dbsession.query(Paper).filter_by(arxiv_id=arxiv_id).first()
+    if paper is None:
+        raise HTTPNotFound
+    return PaperResource(paper)
+
+class PaperResource(object):
+    def __init__(self, paper):
+        self.paper = paper
+
+    def __acl__(self):
+        return [
+            (Allow, Everyone, 'view'),
         ]

@@ -15,7 +15,7 @@ from ..models import (
     get_session_factory,
     get_tm_session,
     )
-from ..models import Page, User
+from ..models import Page, User, Paper
 
 
 def usage(argv):
@@ -55,3 +55,8 @@ def main(argv=sys.argv):
             data='This is the front page',
         )
         dbsession.add(page)
+
+        paper = Paper(
+            arxiv_id='some_id',
+        )
+        dbsession.add(paper)
