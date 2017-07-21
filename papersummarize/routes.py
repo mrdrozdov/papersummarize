@@ -14,7 +14,7 @@ def includeme(config):
     config.add_route('view_wiki', '/')
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
-    config.add_route('view_paper', '/x/{arxiv_id}', factory=arxiv_factory)
+    config.add_route('view_paper', '/x/{arxiv_id}', factory=paper_factory)
     config.add_route('add_summary', '/x/{arxiv_id}/add_summary', factory=new_summary_factory)
     config.add_route('edit_summary', '/x/{arxiv_id}/edit_summary', factory=summary_factory)
     config.add_route('view_page', '/{pagename}', factory=page_factory)
@@ -100,7 +100,7 @@ class PageResource(object):
             (Allow, str(self.page.creator_id), 'edit'),
         ]
 
-def arxiv_factory(request):
+def paper_factory(request):
     arxiv_id = request.matchdict['arxiv_id']
     paper = request.dbsession.query(Paper).filter_by(arxiv_id=arxiv_id).first()
     if paper is None:
