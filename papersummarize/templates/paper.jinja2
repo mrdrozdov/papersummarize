@@ -5,9 +5,13 @@
 {% block content %}
 <p>{{ content|safe }}</p>
 <p>
-    Viewing <strong>{{paper.arxiv_id}}</strong>.
+    <h3><a href="{{request.route_url('view_paper', arxiv_id='{{paper.arxiv_id}}')}}">{{paper.arxiv_id}}</a></h3>
 </p>
-<p>You can return to the
-<a href="{{request.route_url('view_page', pagename='FrontPage')}}">FrontPage</a>.
+<p>
+    Summaries written: <strong>{{ summaries_written }}</strong> {% if summary_written %}
+            <a href="{{ request.route_url('edit_summary', arxiv_id=paper.arxiv_id) }}">Edit</a>
+            {% else %}
+            <a href="{{ request.route_url('add_summary', arxiv_id=paper.arxiv_id) }}">Add</a>
+    {% endif %}
 </p>
 {% endblock content %}

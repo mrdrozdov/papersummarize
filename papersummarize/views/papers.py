@@ -6,13 +6,15 @@ from pyramid.httpexceptions import HTTPFound
 
 from pyramid.view import view_config
 
-from ..models import Summary
+from ..models import Paper, Summary
 
 @view_config(route_name='view_paper', renderer='../templates/paper.jinja2',
              permission='view')
 def view_paper(request):
     paper = request.context.paper
-    return dict(paper=paper)
+    summary_written = request.dbsession.query(Summary).filter_by(creator=request.user, paper=paper).count() == 1
+    summaries_written = request.dbsession.query(Summary).filter_by(paper=paper).count()
+    return dict(paper=paper, summary_written=summary_written, summaries_written=summaries_written)
 
 @view_config(route_name='add_summary', renderer='../templates/add_summary.jinja2',
              permission='create')
