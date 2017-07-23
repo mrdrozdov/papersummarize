@@ -3,17 +3,27 @@
 {% block subtitle %} Welcome to Paper Summarize. {% endblock subtitle %}
 
 {% block content %}
+
+{% if papers_to_show %}
+<p>
+Please view one of these papers.
+</p>
+
+<ul>
+{% for arxiv_id in papers_to_show %}
+    <li><a href="{{request.route_url('view_paper', arxiv_id=arxiv_id)}}">{{arxiv_id}}</a></li>
+{% endfor %}
+</ul>
+
+{% endif %}
+
 <p>
 Paste an <a href="https://arxiv.org">arXiv</a> ID to view or summarize a paper.
 </p>
 <form action="{{ save_url }}" method="post">
 <div class="form-group">
-    <textarea class="form-control" name="body" rows="10" cols="60"></textarea>
-</div>
-<div class="form-group">
+    <input class="form-control" name="body"></input>
     <button type="submit" name="form.submitted.view" value="View" class="btn">View</button>
-</div>
-<div class="form-group">
     <button type="submit" name="form.submitted.summarize" value="Summarize" class="btn btn-default">Summarize</button>
 </div>
 </form>

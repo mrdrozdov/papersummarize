@@ -16,6 +16,7 @@ from ..models import (
     get_tm_session,
     )
 from ..models import Page, User, Paper, Summary
+from ..shared.enums import ENUM_User_is_leader
 
 
 def usage(argv):
@@ -41,7 +42,7 @@ def main(argv=sys.argv):
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
 
-        editor = User(name='editor', role='editor')
+        editor = User(name='editor', role='editor', is_leader=ENUM_User_is_leader['False'])
         editor.set_password('editor')
         dbsession.add(editor)
 
