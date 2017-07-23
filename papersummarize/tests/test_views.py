@@ -43,22 +43,22 @@ class BaseTest(unittest.TestCase):
         return Page(name=name, data=data, creator=creator)
 
 
-class ViewWikiTests(unittest.TestCase):
-    def setUp(self):
-        self.config = testing.setUp()
-        self.config.include('..routes')
+# class ViewWikiTests(unittest.TestCase):
+#     def setUp(self):
+#         self.config = testing.setUp()
+#         self.config.include('..routes')
 
-    def tearDown(self):
-        testing.tearDown()
+#     def tearDown(self):
+#         testing.tearDown()
 
-    def _callFUT(self, request):
-        from papersummarize.views.default import view_wiki
-        return view_wiki(request)
+#     def _callFUT(self, request):
+#         from papersummarize.views.default import view_wiki
+#         return view_wiki(request)
 
-    def test_it(self):
-        request = testing.DummyRequest()
-        response = self._callFUT(request)
-        self.assertEqual(response.location, 'http://example.com/FrontPage')
+#     def test_it(self):
+#         request = testing.DummyRequest()
+#         response = self._callFUT(request)
+#         self.assertEqual(response.location, 'http://example.com/FrontPage')
 
 
 class ViewPageTests(BaseTest):

@@ -15,7 +15,7 @@ from ..models import User
 def login(request):
     next_url = request.params.get('next', request.referrer)
     if not next_url:
-        next_url = request.route_url('view_wiki')
+        next_url = request.route_url('home')
     message = ''
     login = ''
     if 'form.submitted' in request.params:
@@ -37,7 +37,7 @@ def login(request):
 @view_config(route_name='logout')
 def logout(request):
     headers = forget(request)
-    next_url = request.route_url('view_wiki')
+    next_url = request.route_url('home')
     return HTTPFound(location=next_url, headers=headers)
 
 @forbidden_view_config()

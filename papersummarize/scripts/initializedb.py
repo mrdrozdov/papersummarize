@@ -57,13 +57,6 @@ def main(argv=sys.argv):
             dbsession.add(basic_user)
             basic_users.append(basic_user)
 
-        page = Page(
-            name='FrontPage',
-            creator=editor,
-            data='This is the front page',
-        )
-        dbsession.add(page)
-
         paper = Paper(
             arxiv_id='some_id',
         )
