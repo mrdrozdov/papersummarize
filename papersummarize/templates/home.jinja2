@@ -4,7 +4,9 @@
 
 {% block content %}
 
-{% if papers_to_show %}
+{% if papers_to_show is none %}
+<p></p>
+{% else %}
 <p>
 Please view one of these papers.
 </p>

@@ -14,4 +14,20 @@
             <a href="{{ request.route_url('add_summary', arxiv_id=paper.arxiv_id) }}">Add</a>
     {% endif %}
 </p>
+
+{% if summaries is none %}
+<p></p>
+{% else %}
+<ul>
+{% for summary in summaries %}
+    <li>
+    <div>
+    <p>Author: {{ summary.creator.name }}</p>
+    <p>Summary: {{ summary.data }}</p>
+    </div>
+    </li>
+{% endfor %}
+</ul>
+{% endif %}
+
 {% endblock content %}

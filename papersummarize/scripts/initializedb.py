@@ -16,7 +16,7 @@ from ..models import (
     get_tm_session,
     )
 from ..models import Page, User, Paper, Summary
-from ..shared.enums import ENUM_User_is_leader
+from ..shared.enums import ENUM_User_is_leader, ENUM_Summary_visibility, ENUM_Summary_review_status
 
 
 def usage(argv):
@@ -42,7 +42,7 @@ def main(argv=sys.argv):
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
 
-        editor = User(name='editor', role='editor', is_leader=ENUM_User_is_leader['False'])
+        editor = User(name='editor', role='editor', is_leader=ENUM_User_is_leader['True'])
         editor.set_password('editor')
         dbsession.add(editor)
 
@@ -68,9 +68,38 @@ def main(argv=sys.argv):
         )
         dbsession.add(other_paper)
 
-        summary = Summary(
+        summary_unaccepted = Summary(
             creator=editor,
             paper=other_paper,
-            data='this is a summary.'
+            data='this summary is under review.',
+            visibility=ENUM_Summary_visibility['members'],
+            review_status=ENUM_Summary_review_status['under_review'],
         )
-        dbsession.add(summary)
+        dbsession.add(summary_unaccepted)
+
+        summary_accepted = Summary(
+            creator=editor,
+            paper=other_paper,
+            data='this summary is reviewed.',
+            visibility=ENUM_Summary_visibility['members'],
+            review_status=ENUM_Summary_review_status['reviewed'],
+        )
+        dbsession.add(summary_accepted)
+
+        summary_public = Summary(
+            creator=editor,
+            paper=other_paper,
+            data='this summary is reviewed and public.',
+            visibility=ENUM_Summary_visibility['public'],
+            review_status=ENUM_Summary_review_status['reviewed'],
+        )
+        dbsession.add(summary_public)
+
+        summary_public_unaccepted = Summary(
+            creator=editor,
+            paper=other_paper,
+            data='this summary is under review and public (probably will not be possible create naturally).',
+            visibility=ENUM_Summary_visibility['public'],
+            review_status=ENUM_Summary_review_status['under_review'],
+        )
+        dbsession.add(summary_public_unaccepted)
