@@ -42,6 +42,10 @@ class BaseTest(unittest.TestCase):
         from ..models import Page
         return Page(name=name, data=data, creator=creator)
 
+    def makePaper(self, arxiv_id):
+        from ..models import Paper
+        return Paper(arxiv_id=arxiv_id)
+
 
 # class ViewWikiTests(unittest.TestCase):
 #     def setUp(self):
@@ -59,6 +63,29 @@ class BaseTest(unittest.TestCase):
 #         request = testing.DummyRequest()
 #         response = self._callFUT(request)
 #         self.assertEqual(response.location, 'http://example.com/FrontPage')
+
+
+class ViewPaperTests(BaseTest):
+    def _callFUT(self, request):
+        from papersummarize.views.papers import view_paper
+        return view_paper(request)
+
+    def test_it(self):
+        from ..routes import PaperResource
+
+        # add a page to the db
+        user = self.makeUser('foo', 'editor')
+        paper = self.makePaper('some_arxiv_id')
+        self.session.add_all([paper, user])
+
+        # create a request asking for the page we've created
+        request = dummy_request(self.session)
+        request.user = user
+        request.context = PaperResource(paper)
+
+        # call the view we're testing and check its behavior
+        info = self._callFUT(request)
+        self.assertEqual(info['paper'], paper)
 
 
 class ViewPageTests(BaseTest):
