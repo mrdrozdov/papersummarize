@@ -15,7 +15,7 @@ from ..models import (
     get_session_factory,
     get_tm_session,
     )
-from ..models import Page, User, Paper, Summary
+from ..models import Page, User, Paper, Summary, Tip
 from ..shared.enums import ENUM_User_is_leader, ENUM_Summary_visibility, ENUM_Summary_review_status
 
 
@@ -50,6 +50,13 @@ def main(argv=sys.argv):
         basic.set_password('basic')
         dbsession.add(basic)
 
+        basic_users = []
+        for i in range(10):
+            basic_user = User(name='basic' + str(i), role='basic')
+            basic_user.set_password('basic')
+            dbsession.add(basic_user)
+            basic_users.append(basic_user)
+
         page = Page(
             name='FrontPage',
             creator=editor,
@@ -69,7 +76,7 @@ def main(argv=sys.argv):
         dbsession.add(other_paper)
 
         summary_unaccepted = Summary(
-            creator=editor,
+            creator=basic_users[0],
             paper=other_paper,
             data='this summary is under review.',
             visibility=ENUM_Summary_visibility['members'],
@@ -78,7 +85,7 @@ def main(argv=sys.argv):
         dbsession.add(summary_unaccepted)
 
         summary_accepted = Summary(
-            creator=editor,
+            creator=basic_users[1],
             paper=other_paper,
             data='this summary is reviewed.',
             visibility=ENUM_Summary_visibility['members'],
@@ -96,10 +103,17 @@ def main(argv=sys.argv):
         dbsession.add(summary_public)
 
         summary_public_unaccepted = Summary(
-            creator=editor,
+            creator=basic_users[2],
             paper=other_paper,
             data='this summary is under review and public (probably will not be possible create naturally).',
             visibility=ENUM_Summary_visibility['public'],
             review_status=ENUM_Summary_review_status['under_review'],
         )
         dbsession.add(summary_public_unaccepted)
+
+        tip = Tip(
+            creator=editor,
+            paper=other_paper,
+            data='this is a tip.',
+        )
+        dbsession.add(tip)

@@ -6,7 +6,7 @@ from pyramid.httpexceptions import HTTPFound
 
 from pyramid.view import view_config
 
-from ..models import Paper, Summary
+from ..models import Paper, Summary, Tip
 from ..shared.enums import ENUM_User_is_leader, ENUM_Summary_visibility, ENUM_Summary_review_status
 
 @view_config(route_name='view_paper', renderer='../templates/paper.jinja2',
@@ -24,8 +24,13 @@ def view_paper(request):
             summaries = request.dbsession.query(Summary).filter_by(paper=paper, visibility=ENUM_Summary_review_status['reviewed']).all()
     else:
         summaries = request.dbsession.query(Summary).filter_by(paper=paper, visibility=ENUM_Summary_visibility['public']).all()
+    tips = request.dbsession.query(Tip).filter_by(paper=paper).all()
 
-    return dict(paper=paper, summary_written=summary_written, summaries_written=summaries_written, summaries=summaries)
+    return dict(paper=paper,
+        summary_written=summary_written,
+        summaries_written=summaries_written,
+        summaries=summaries,
+        tips=tips)
 
 @view_config(route_name='add_summary', renderer='../templates/add_summary.jinja2',
              permission='create')

@@ -18,6 +18,8 @@
 {% if summaries is none %}
 <p></p>
 {% else %}
+<div>
+<p>Summaries:</p>
 <ul>
 {% for summary in summaries %}
     <li>
@@ -28,6 +30,25 @@
     </li>
 {% endfor %}
 </ul>
+</div>
+{% endif %}
+
+{% if tips is none %}
+<p></p>
+{% else %}
+<div>
+<p>Tips:</p>
+<ul>
+{% for tip in tips %}
+    <li>
+    <div>
+    <p>Author: {{ tip.creator.name }}</p>
+    <p>Summary: {{ tip.data }}</p>
+    </div>
+    </li>
+{% endfor %}
+</ul>
+</div>
 {% endif %}
 
 {% endblock content %}
