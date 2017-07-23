@@ -1,0 +1,10 @@
+{% extends 'layout.jinja2' %}
+
+{% block subtitle %}Summarize - {% endblock subtitle %}
+
+{% block content %}
+<p>{{ content|safe }}</p>
+
+<p>Profile: {{ user.name }}</p>
+
+{% endblock content %}

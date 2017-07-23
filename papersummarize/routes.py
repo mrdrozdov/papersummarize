@@ -7,18 +7,22 @@ from pyramid.security import (
     Everyone,
 )
 
-from .models import Page, Paper, Summary, Tip
+from .models import Page, Paper, Summary, Tip, User
 
 def includeme(config):
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
+    # Paper
     config.add_route('view_paper', '/x/{arxiv_id}', factory=paper_factory)
     config.add_route('add_summary', '/x/{arxiv_id}/add_summary', factory=new_summary_factory)
     config.add_route('edit_summary', '/x/{arxiv_id}/edit_summary', factory=summary_factory)
     config.add_route('add_tip', '/x/{arxiv_id}/add_tip', factory=new_tip_factory)
     config.add_route('edit_tip', '/x/{arxiv_id}/{tip_id}/edit', factory=tip_factory)
+    # User
+    config.add_route('view_user', '/u/{user_name}', factory=user_factory)
+    # Page
     config.add_route('view_page', '/{pagename}', factory=page_factory)
     config.add_route('add_page', '/add_page/{pagename}',
                      factory=new_page_factory)
@@ -152,6 +156,22 @@ def paper_factory(request):
 class PaperResource(object):
     def __init__(self, paper):
         self.paper = paper
+
+    def __acl__(self):
+        return [
+            (Allow, Everyone, 'view'),
+        ]
+
+def user_factory(request):
+    user_name = request.matchdict['user_name']
+    user = request.dbsession.query(User).filter_by(name=user_name).first()
+    if user is None:
+        raise HTTPNotFound
+    return UserResource(user)
+
+class UserResource(object):
+    def __init__(self, user):
+        self.user = user
 
     def __acl__(self):
         return [
