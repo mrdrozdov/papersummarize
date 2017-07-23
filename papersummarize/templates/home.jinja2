@@ -1,0 +1,20 @@
+{% extends 'layout.jinja2' %}
+
+{% block subtitle %} Welcome to Paper Summarize. {% endblock subtitle %}
+
+{% block content %}
+<p>
+Paste an <a href="https://arxiv.org">arXiv</a> ID to view or summarize a paper.
+</p>
+<form action="{{ save_url }}" method="post">
+<div class="form-group">
+    <textarea class="form-control" name="body" rows="10" cols="60"></textarea>
+</div>
+<div class="form-group">
+    <button type="submit" name="form.submitted.view" value="View" class="btn">View</button>
+</div>
+<div class="form-group">
+    <button type="submit" name="form.submitted.summarize" value="Summarize" class="btn btn-default">Summarize</button>
+</div>
+</form>
+{% endblock content %}

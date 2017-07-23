@@ -5,7 +5,7 @@
 {% block content %}
 <p>{{ content|safe }}</p>
 <p>
-    <h3><a href="{{request.route_url('view_paper', arxiv_id='{{paper.arxiv_id}}')}}">{{paper.arxiv_id}}</a></h3>
+    <h3><a href="{{request.route_url('view_paper', arxiv_id=paper.arxiv_id)}}">{{paper.arxiv_id}}</a></h3>
 </p>
 <p>
     Summaries written: <strong>{{ summaries_written }}</strong> {% if summary_written %}
