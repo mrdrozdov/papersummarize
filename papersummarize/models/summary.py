@@ -1,8 +1,11 @@
+from datetime import datetime
+
 from sqlalchemy import (
     Column,
     ForeignKey,
     Integer,
     Text,
+    DateTime,
 )
 from sqlalchemy.orm import relationship
 
@@ -16,8 +19,10 @@ class Summary(Base):
     id = Column(Integer, primary_key=True)
     paper_id = Column(ForeignKey('papers.id'), nullable=False)
     creator_id = Column(ForeignKey('users.id'), nullable=False)
-    visibility = Column(Text, nullable=False, default=ENUM_Summary_visibility['members'])
-    review_status = Column(Text, nullable=False, default=ENUM_Summary_review_status['under_review'])
+    created_at = Column(DateTime, default=datetime.now)
+    reviewed_at = Column(DateTime, default=datetime.now)
+    visibility = Column(Integer, nullable=False, default=ENUM_Summary_visibility['members'])
+    review_status = Column(Integer, nullable=False, default=ENUM_Summary_review_status['under_review'])
 
     data = Column(Text, nullable=False)
 

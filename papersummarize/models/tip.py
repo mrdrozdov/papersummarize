@@ -1,8 +1,11 @@
+from datetime import datetime
+
 from sqlalchemy import (
     Column,
     ForeignKey,
     Integer,
     Text,
+    DateTime,
 )
 from sqlalchemy.orm import relationship
 
@@ -15,6 +18,7 @@ class Tip(Base):
     id = Column(Integer, primary_key=True)
     paper_id = Column(ForeignKey('papers.id'), nullable=False)
     creator_id = Column(ForeignKey('users.id'), nullable=False)
+    created_at = Column(DateTime, default=datetime.now)
 
     data = Column(Text, nullable=False)
 

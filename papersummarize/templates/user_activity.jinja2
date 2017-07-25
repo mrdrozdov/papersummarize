@@ -1,0 +1,16 @@
+{% extends 'layout.jinja2' %}
+
+{% block subtitle %} Activity Log {% endblock subtitle %}
+
+{% block content %}
+<p>{{ content|safe }}</p>
+
+{% if activities is not none %}
+<ul>
+{% for item in activities %}
+<li>[{{item.created_at}}] {{item.text}} <a href="{{ item.url }}">#</a></li>
+{% endfor %}
+<ul>
+{% endif %}
+
+{% endblock content %}

@@ -7,4 +7,6 @@
 
 <p>Profile: {{ user.name }}</p>
 
+<p><a href="{{request.route_url('view_user_activity', user_name=user.name)}}">activity</a></p>
+
 {% endblock content %}

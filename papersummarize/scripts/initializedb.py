@@ -57,10 +57,10 @@ def main(argv=sys.argv):
             dbsession.add(basic_user)
             basic_users.append(basic_user)
 
-        paper = Paper(
+        some_paper = Paper(
             arxiv_id='some_id',
         )
-        dbsession.add(paper)
+        dbsession.add(some_paper)
 
         other_paper_id = 'other_id'
         other_paper = Paper(
@@ -85,6 +85,14 @@ def main(argv=sys.argv):
             review_status=ENUM_Summary_review_status['reviewed'],
         )
         dbsession.add(summary_accepted)
+
+        summary_public = Summary(
+            creator=editor,
+            paper=some_paper,
+            data='this summary is not reviewed.',
+            review_status=ENUM_Summary_review_status['under_review'],
+        )
+        dbsession.add(summary_public)
 
         summary_public = Summary(
             creator=editor,

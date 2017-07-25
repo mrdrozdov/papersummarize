@@ -22,6 +22,7 @@ def includeme(config):
     config.add_route('edit_tip', '/x/{arxiv_id}/{tip_id}/edit', factory=tip_factory)
     # User
     config.add_route('view_user', '/u/{user_name}', factory=user_factory)
+    config.add_route('view_user_activity', '/u/{user_name}/activity', factory=user_factory)
     # Page
     config.add_route('view_page', '/{pagename}', factory=page_factory)
     config.add_route('add_page', '/add_page/{pagename}',

@@ -32,35 +32,35 @@
             <p>
               <a href="/">Paper Summarize</a>
             </p>
+          </div>
+          <div class="col-md-10">
+            <div class="content">
+            {% if request.user is none %}
+            <p class="pull-right">
+            <a href="{{ request.route_url('login') }}">login</a>
+            </p>
+            {% else %}
+            <p class="pull-right">
+            <a href="{{ request.route_url('view_user', user_name=request.user.name) }}">{{request.user.name}}</a> | <a href="{{request.route_url('logout')}}">logout</a>
+            </p>
+            {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2">
             <p>
               Research in your own words.
             </p>
             <p>
               Built by <a href="https://twitter.com/mrdrozdov">@mrdrozdov</a>.
             </p>
+            <p>
+              <a href="https://github.com/mrdrozdov/papersummarize">Contribute</a>.
+            </p>
           </div>
           <div class="col-md-10">
-            <div class="content">
-            {% if request.user is none %}
-            <p class="pull-right">
-            <a href="{{ request.route_url('login') }}">Login</a>
-            </p>
-            {% else %}
-            <p class="pull-right">
-            {{request.user.name}} <a href="{{request.route_url('logout')}}">Logout</a>
-            </p>
-            {% endif %}
             {% block content %}{% endblock %}
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="links">
-            <ul>
-              <li><i class="glyphicon glyphicon-cog icon-muted"></i><a href="https://github.com/Pylons/pyramid">Github Project</a></li>
-              <li><i class="glyphicon glyphicon-globe icon-muted"></i><a href="https://webchat.freenode.net/?channels=pyramid">IRC Channel</a></li>
-              <li><i class="glyphicon glyphicon-home icon-muted"></i><a href="https://pylonsproject.org">Pylons Project</a></li>
-            </ul>
           </div>
         </div>
       </div>

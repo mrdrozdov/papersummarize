@@ -41,7 +41,7 @@ def view_paper(request):
         elif has_wrote:
             summaries = request.dbsession.query(Summary).filter_by(paper=paper, review_status=ENUM_Summary_review_status['reviewed']).all()
         else:
-            summaries = request.dbsession.query(Summary).filter_by(paper=paper, review_status=ENUM_Summary_review_status['public']).all()
+            summaries = request.dbsession.query(Summary).filter_by(paper=paper, review_status=ENUM_Summary_visibility['public']).all()
     else:
         summaries = request.dbsession.query(Summary).filter_by(paper=paper, visibility=ENUM_Summary_visibility['public']).all()
     tips = request.dbsession.query(Tip).filter_by(paper=paper).all()
