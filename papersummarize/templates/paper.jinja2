@@ -46,12 +46,7 @@ Tip Count: <strong>{{ num_tips }}</strong> (<a href="{{ request.route_url('add_t
     <li>
     <div>
     <p>{{ tip.data }}</p>
-    <p>by <a href="{{ request.route_url('view_user', user_name=tip.creator.name) }}">{{ tip.creator.name }}</a> on {{ tip.created_at_formatted }}</p>
-    {% if tip.creator.name == request.user.name %}
-    <p>
-    <a href="{{ request.route_url('edit_tip', arxiv_id=paper.arxiv_id, tip_id=tip.id) }}">Edit</a>
-    </p>
-    {% endif %}
+    <p>by <a href="{{ request.route_url('view_user', user_name=tip.creator.name) }}">{{ tip.creator.name }}</a> on <a href="{{ request.route_url('view_tip', arxiv_id=paper.arxiv_id, tip_id=tip.id) }}">{{ tip.created_at_formatted }}</a></p>
     </div>
     </li>
 {% endfor %}

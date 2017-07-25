@@ -99,14 +99,18 @@ def add_tip(request):
     save_url = request.route_url('add_tip', arxiv_id=paper.arxiv_id)
     return dict(paper=paper, save_url=save_url)
 
-@view_config(route_name='edit_tip', renderer='../templates/edit_tip.jinja2',
-             permission='edit')
-def edit_tip(request):
+@view_config(route_name='view_tip', renderer='../templates/view_tip.jinja2')
+def view_tip(request):
     tip = request.context.tip
     paper = tip.paper
-    if 'form.submitted' in request.params:
-        tip.data = request.params['body']
-        next_url = request.route_url('view_paper', arxiv_id=paper.arxiv_id)
-        return HTTPFound(location=next_url)
-    save_url = request.route_url('edit_tip', arxiv_id=paper.arxiv_id, tip_id=tip.id)
-    return dict(paper=paper, data=tip.data, save_url=save_url)
+    remove_url = request.route_url('delete_tip', arxiv_id=paper.arxiv_id, tip_id=tip.id)
+    return dict(tip=tip, paper=paper, remove_url=remove_url)
+
+@view_config(route_name='delete_tip', permission='edit')
+def delete_tip(request):
+    tip = request.context.tip
+    paper = tip.paper
+    arxiv_id = paper.arxiv_id
+    request.dbsession.delete(tip)
+    next_url = request.route_url('view_paper', arxiv_id=arxiv_id)
+    return HTTPFound(location=next_url)

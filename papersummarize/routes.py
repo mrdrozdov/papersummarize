@@ -19,7 +19,8 @@ def includeme(config):
     config.add_route('add_summary', '/x/{arxiv_id}/add_summary', factory=new_summary_factory)
     config.add_route('edit_summary', '/x/{arxiv_id}/edit_summary', factory=summary_factory)
     config.add_route('add_tip', '/x/{arxiv_id}/add_tip', factory=new_tip_factory)
-    config.add_route('edit_tip', '/x/{arxiv_id}/{tip_id}/edit', factory=tip_factory)
+    config.add_route('view_tip', '/x/{arxiv_id}/{tip_id}', factory=tip_factory)
+    config.add_route('delete_tip', '/x/{arxiv_id}/{tip_id}/delete', factory=tip_factory)
     # User
     config.add_route('view_user', '/u/{user_name}', factory=user_factory)
     config.add_route('view_user_activity', '/u/{user_name}/activity', factory=user_factory)

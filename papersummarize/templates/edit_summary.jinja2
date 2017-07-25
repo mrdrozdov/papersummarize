@@ -8,10 +8,10 @@ Submit summary for <strong><a href="{{request.route_url('view_paper', arxiv_id=p
 </p>
 <form action="{{ save_url }}" method="post">
 <div class="form-group">
-    <textarea class="form-control" name="body" rows="10" cols="60">{{ data }}</textarea>
+    <textarea class="form-control" name="body" rows="10" cols="60" disabled>{{ data }}</textarea>
 </div>
 <div class="form-group">
-    <button type="submit" name="form.submitted" value="Save" class="btn btn-default">Save</button>
+    <button type="submit" name="form.submitted" value="Delete" class="btn btn-danger">Delete</button>
 </div>
 </form>
 {% endblock content %}
