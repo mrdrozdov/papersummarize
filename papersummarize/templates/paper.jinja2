@@ -27,8 +27,8 @@ Tip Count: <strong>{{ num_tips }}</strong> (<a href="{{ request.route_url('add_t
 {% for summary in summaries %}
     <li>
     <div>
-    <p>Author: {{ summary.creator.name }}</p>
-    <p>Summary: {{ summary.data }}</p>
+    <p>{{ summary.data }}</p>
+    <p>by <a href="{{ request.route_url('view_user', user_name=summary.creator.name) }}">{{ summary.creator.name }}</a> on {{ summary.created_at_formatted }}</p>
     </div>
     </li>
 {% endfor %}
@@ -45,8 +45,8 @@ Tip Count: <strong>{{ num_tips }}</strong> (<a href="{{ request.route_url('add_t
 {% for tip in tips %}
     <li>
     <div>
-    <p>Author: {{ tip.creator.name }}</p>
-    <p>Summary: {{ tip.data }}</p>
+    <p>{{ tip.data }}</p>
+    <p>by <a href="{{ request.route_url('view_user', user_name=tip.creator.name) }}">{{ tip.creator.name }}</a> on {{ tip.created_at_formatted }}</p>
     {% if tip.creator.name == request.user.name %}
     <p>
     <a href="{{ request.route_url('edit_tip', arxiv_id=paper.arxiv_id, tip_id=tip.id) }}">Edit</a>

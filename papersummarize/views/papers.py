@@ -47,11 +47,18 @@ def view_paper(request):
     tips = request.dbsession.query(Tip).filter_by(paper=paper).all()
     num_tips = request.dbsession.query(Tip).filter_by(paper=paper).count()
 
+    def format_date(d):
+        return d.strftime("%B %d, %Y")
+
+    def add_date(o):
+        o.created_at_formatted = format_date(o.created_at)
+        return o
+
     return dict(paper=paper,
         has_wrote=has_wrote,
         num_summaries=num_summaries,
-        summaries=summaries,
-        tips=tips,
+        summaries=map(add_date, summaries),
+        tips=map(add_date, tips),
         num_tips=num_tips)
 
 @view_config(route_name='add_summary', renderer='../templates/add_summary.jinja2',
