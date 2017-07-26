@@ -75,6 +75,26 @@ class URLInput extends React.Component {
     }
 }
 
+class TipSuggestions extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return React.createElement('div', null, 
+            React.createElement('p', null, 'Choose from popular categories:'),
+            React.createElement('ul', null,
+                React.createElement('li', null,
+                    React.createElement('a', {href: '#', onClick: function() {this.props.onClick('github')}.bind(this)}, 'github')
+                ),
+                React.createElement('li', null,
+                    React.createElement('a', {href: '#', onClick: function() {this.props.onClick('other')}.bind(this)}, 'other')
+                )
+            )
+        );
+    }
+}
+
 class TipForm extends React.Component {
     constructor(props) {
         super(props);
@@ -83,11 +103,16 @@ class TipForm extends React.Component {
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
         this.handleDataChange = this.handleDataChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.changeCategory = this.changeCategory.bind(this);
+    }
+
+    changeCategory(category) {
+        this.setState({ semanticData: '', semanticCategory: category, isValid: false, helpText: '' });
     }
 
     handleCategoryChange(event) {
         var category = event.target.value;
-        this.setState({ semanticData: '', semanticCategory: category, isValid: false, helpText: '' });
+        this.changeCategory(category);
     }
 
     handleDataChange(data, isValid, helpText) {
@@ -121,20 +146,23 @@ class TipForm extends React.Component {
             semanticInputNodes.push(semanticInputHelpNode);
         }
 
-        return React.createElement('form', {className: 'TipForm', onSubmit: this.handleSubmit, action: '{{ save_url }}'},
-            React.createElement('div', {className: 'form-group semantic-input' + hasErrorClass}, semanticInputNodes),
-            React.createElement('div', {className: 'form-group semantic-category'},
-                React.createElement('span', null, 'Category: '),
-                React.createElement('span', null,
-                    React.createElement('select', {onChange: this.handleCategoryChange, value: this.state.semanticCategory},
-                        React.createElement('option', {disabled: true, value: 'default'}, ' -- select an option -- '),
-                        React.createElement('option', {value: 'github'}, 'Github URL'),
-                        React.createElement('option', {value: 'other'}, 'Other')
+        return React.createElement('div', null,
+            React.createElement(TipSuggestions, {onClick: this.changeCategory}, null),
+            React.createElement('form', {className: 'TipForm', onSubmit: this.handleSubmit, action: '{{ save_url }}'},
+                React.createElement('div', {className: 'form-group semantic-input' + hasErrorClass}, semanticInputNodes),
+                React.createElement('div', {className: 'form-group semantic-category'},
+                    React.createElement('span', null, 'Category: '),
+                    React.createElement('span', null,
+                        React.createElement('select', {onChange: this.handleCategoryChange, value: this.state.semanticCategory},
+                            React.createElement('option', {disabled: true, value: 'default'}, ' -- select an option -- '),
+                            React.createElement('option', {value: 'github'}, 'Github URL'),
+                            React.createElement('option', {value: 'other'}, 'Other')
+                        )
                     )
+                ),
+                React.createElement('div', {className: 'form-group'},
+                    React.createElement('button', {className: 'btn btn-default', name: 'form.submitted'}, `Submit`),
                 )
-            ),
-            React.createElement('div', {className: 'form-group'},
-                React.createElement('button', {className: 'btn btn-default', name: 'form.submitted'}, `Submit`),
             )
         );
     }

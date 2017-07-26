@@ -8,7 +8,7 @@ Submit tip for <strong><a href="{{request.route_url('view_paper', arxiv_id=paper
 </p>
 <form action="{{ remove_url }}" method="post">
 <div class="form-group">
-    <textarea class="form-control" name="body" rows="10" cols="60" disabled>{{ tip.data }}</textarea>
+    <textarea class="form-control" name="body" rows="10" cols="60" readonly>{{ tip.data }}</textarea>
 </div>
 {% if tip.creator.name == request.user.name %}
 <div class="form-group">
