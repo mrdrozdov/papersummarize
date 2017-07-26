@@ -45,7 +45,7 @@ Tip Count: <strong>{{ num_tips }}</strong> (<a href="{{ request.route_url('add_t
 {% for tip in tips %}
     <li>
     <div>
-    <p>{{ tip.data }}</p>
+    <p data-linkify="this">{{ tip.data }}</p>
     <p>by <a href="{{ request.route_url('view_user', user_name=tip.creator.name) }}">{{ tip.creator.name }}</a> on <a href="{{ request.route_url('view_tip', arxiv_id=paper.arxiv_id, tip_id=tip.id) }}">{{ tip.created_at_formatted }}</a></p>
     </div>
     </li>
@@ -55,3 +55,8 @@ Tip Count: <strong>{{ num_tips }}</strong> (<a href="{{ request.route_url('add_t
 {% endif %}
 
 {% endblock content %}
+
+{% block js %}
+<script src="{{request.static_url('papersummarize:static/js/shared/linkify.min.js')}}"></script>
+<script src="{{request.static_url('papersummarize:static/js/shared/linkify-jquery.min.js')}}"></script>
+{% endblock %}

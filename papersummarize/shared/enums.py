@@ -14,3 +14,7 @@ ENUM_Summary_review_status = dict(
 ENUM_Summary_visibility = dict(
     members=0,
     public=1)
+
+ENUM_Tip_category = dict(
+    github_url=0,
+    other=1)

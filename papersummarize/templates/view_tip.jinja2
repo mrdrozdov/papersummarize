@@ -8,7 +8,7 @@ Submit tip for <strong><a href="{{request.route_url('view_paper', arxiv_id=paper
 </p>
 <form action="{{ remove_url }}" method="post">
 <div class="form-group">
-    <textarea class="form-control" name="body" rows="10" cols="60" readonly>{{ tip.data }}</textarea>
+    <div data-linkify="this" class="form-control" name="body" rows="10" cols="60" readonly>{{ tip.data }}</div>
 </div>
 {% if tip.creator.name == request.user.name %}
 <div class="form-group">
@@ -17,3 +17,8 @@ Submit tip for <strong><a href="{{request.route_url('view_paper', arxiv_id=paper
 {% endif %}
 </form>
 {% endblock content %}
+
+{% block js %}
+<script src="{{request.static_url('papersummarize:static/js/shared/linkify.min.js')}}"></script>
+<script src="{{request.static_url('papersummarize:static/js/shared/linkify-jquery.min.js')}}"></script>
+{% endblock %}

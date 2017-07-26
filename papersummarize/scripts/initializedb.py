@@ -16,7 +16,9 @@ from ..models import (
     get_tm_session,
     )
 from ..models import Page, User, Paper, Summary, Tip
-from ..shared.enums import ENUM_User_is_leader, ENUM_Summary_visibility, ENUM_Summary_review_status
+from ..shared.enums import ENUM_User_is_leader
+from ..shared.enums import ENUM_Summary_visibility, ENUM_Summary_review_status
+from ..shared.enums import ENUM_Tip_category
 
 
 def usage(argv):
@@ -115,6 +117,7 @@ def main(argv=sys.argv):
         tip = Tip(
             creator=editor,
             paper=other_paper,
-            data='this is a tip.',
+            category=ENUM_Tip_category['other'],
+            data='this is a tip https://github.com/mrdrozdov/spinn',
         )
         dbsession.add(tip)
