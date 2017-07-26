@@ -57,6 +57,7 @@ setup(
         ],
         'console_scripts': [
             'initialize_papersummarize_db = papersummarize.scripts.initializedb:main',
+            'initialize_arxiv_db = papersummarize.scripts.load_papers:main',
         ],
     },
 )

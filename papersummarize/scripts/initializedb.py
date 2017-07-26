@@ -1,6 +1,7 @@
 import os
 import sys
 import transaction
+from datetime import datetime
 
 from pyramid.paster import (
     get_appsettings,
@@ -15,7 +16,7 @@ from ..models import (
     get_session_factory,
     get_tm_session,
     )
-from ..models import Page, User, Paper, Summary, Tip
+from ..models import User, Paper, Summary, Tip
 from ..shared.enums import ENUM_User_is_leader
 from ..shared.enums import ENUM_Summary_visibility, ENUM_Summary_review_status
 from ..shared.enums import ENUM_Tip_category
@@ -27,6 +28,23 @@ def usage(argv):
           '(example: "%s development.ini")' % (cmd, cmd))
     sys.exit(1)
 
+def stub_paper(arxiv_id):
+    paper = Paper(arxiv_id=arxiv_id)
+    paper._rawid = 'fake'
+    paper._version = 'fake'
+    paper.arxiv_comment = 'fake'
+    paper.arxiv_primary_category = 'fake'
+    paper.author = 'fake'
+    paper.author_detail = 'fake'
+    paper.authors = 'fake'
+    paper.link = 'fake'
+    paper.links = 'fake'
+    paper.published = datetime.now()
+    paper.summary = 'fake'
+    paper.tags = 'fake'
+    paper.title = 'fake'
+    paper.updated = datetime.now()
+    return paper
 
 def main(argv=sys.argv):
     if len(argv) < 2:
@@ -59,15 +77,11 @@ def main(argv=sys.argv):
             dbsession.add(basic_user)
             basic_users.append(basic_user)
 
-        some_paper = Paper(
-            arxiv_id='some_id',
-        )
+        some_paper = stub_paper(arxiv_id='some_id')
         dbsession.add(some_paper)
 
         other_paper_id = 'other_id'
-        other_paper = Paper(
-            arxiv_id=other_paper_id,
-        )
+        other_paper = stub_paper(arxiv_id=other_paper_id)
         dbsession.add(other_paper)
 
         summary_unaccepted = Summary(
