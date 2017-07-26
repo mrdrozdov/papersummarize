@@ -6,12 +6,77 @@
 <p>
 Submit tip for <strong><a href="{{request.route_url('view_paper', arxiv_id=paper.arxiv_id)}}">{{paper.arxiv_id}}</a></strong>
 </p>
-<form action="{{ save_url }}" method="post">
-<div class="form-group">
-    <textarea class="form-control" name="body" rows="10" cols="60"></textarea>
+<div id="react-root">
 </div>
-<div class="form-group">
-    <button type="submit" name="form.submitted" value="Save" class="btn btn-default">Save</button>
-</div>
-</form>
 {% endblock content %}
+
+{% block js %}
+<script>
+class SimpleInput extends React.Component {
+    render() {
+        return React.createElement('input', {className: 'form-control'}, null);
+    }
+}
+
+class DualInput extends React.Component {
+    render() {
+        return React.createElement('span', null,
+            React.createElement('input', {className: 'form-control'}, null),
+            React.createElement('input', {className: 'form-control'}, null)
+        );
+    }
+}
+
+class SemanticInput extends React.Component {
+    render() {
+        switch(`${this.props.semanticCategory}`) {
+            case 'github':
+                return React.createElement(SimpleInput, null, null);
+            case 'other':
+                return React.createElement(DualInput, null, null);
+            default:
+                return React.createElement('span', null, null);
+        }
+    }
+}
+
+class TipForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {semanticData: null, semanticCategory: 'default'};
+
+        this.handleCategoryChange = this.handleCategoryChange.bind(this)
+    }
+
+    handleCategoryChange(event) {
+        this.setState({semanticCategory: event.target.value});
+    }
+
+    render() {
+        return React.createElement('form', {className: 'TipForm'},
+            React.createElement('div', {className: 'form-group semantic-input'},
+                React.createElement(SemanticInput, {semanticCategory: this.state.semanticCategory}, null)
+            ),
+            React.createElement('div', {className: 'form-group semantic-category'},
+                React.createElement('span', null, 'Category: '),
+                React.createElement('span', null,
+                    React.createElement('select', {onChange: this.handleCategoryChange, value: this.state.semanticCategory},
+                        React.createElement('option', {disabled: true, value: 'default'}, ' -- select an option -- '),
+                        React.createElement('option', {value: 'github'}, 'Github URL'),
+                        React.createElement('option', {value: 'other'}, 'Other')
+                    )
+                )
+            ),
+            React.createElement('div', {className: 'form-group'},
+                React.createElement('button', {className: 'btn btn-default'}, `Submit`),
+            )
+        );
+    }
+}
+
+ReactDOM.render(
+    React.createElement(TipForm, null, null),
+    document.getElementById('react-root')
+);
+</script>
+{% endblock %}
