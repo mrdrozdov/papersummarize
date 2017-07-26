@@ -54,7 +54,7 @@ def tip_factory(request):
     paper = request.dbsession.query(Paper).filter_by(arxiv_id=arxiv_id).first()
     if paper is None:
         raise HTTPNotFound
-    tip = request.dbsession.query(Tip).filter_by(creator=request.user, id=tip_id, paper=paper).first()
+    tip = request.dbsession.query(Tip).filter_by(id=tip_id, paper=paper).first()
     if tip is None:
         raise HTTPNotFound
     return TipResource(tip)
