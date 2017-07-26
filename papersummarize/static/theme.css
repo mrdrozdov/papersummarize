@@ -2,8 +2,9 @@
 body {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 300;
-  color: #ffffff;
-  background: #bc2131;
+  /*color: #ffffff;*/
+  /*background: #bc2131;*/
+  background: #E6E2EB;
 }
 h1,
 h2,
@@ -73,11 +74,11 @@ p {
   font-weight: 400;
 }
 .starter-template .links ul li a, a {
-  color: #f2b7bd;
+  /*color: #f2b7bd;*/
   text-decoration: underline;
 }
 .starter-template .links ul li a:hover, a:hover {
-  color: #ffffff;
+  /*color: #ffffff;*/
   text-decoration: underline;
 }
 .starter-template .links ul li .icon-muted {
