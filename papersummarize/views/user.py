@@ -35,11 +35,11 @@ def view_user_activity(request):
                 text = "Created summary, which has been reviewed."
             else:
                 text = "Created summary, which has not been reviewed."
-            url = request.route_url('view_paper', arxiv_id=a.paper.arxiv_id)
+            url = request.route_url('view_summary', arxiv_id=a.paper.arxiv_id, user_name=a.creator.name)
         elif isinstance(a, Tip):
             created_at = a.created_at
             text = "Created tip."
-            url = request.route_url('view_paper', arxiv_id=a.paper.arxiv_id)
+            url = request.route_url('view_tip', arxiv_id=a.paper.arxiv_id, tip_id=a.id)
         else:
             created_at = a.created_at
             text = "Unknown activity."
