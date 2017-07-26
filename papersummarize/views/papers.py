@@ -74,17 +74,11 @@ def add_summary(request):
     save_url = request.route_url('add_summary', arxiv_id=paper.arxiv_id)
     return dict(paper=paper, save_url=save_url)
 
-@view_config(route_name='edit_summary', renderer='../templates/edit_summary.jinja2',
-             permission='edit')
-def edit_summary(request):
+@view_config(route_name='view_summary', renderer='../templates/view_summary.jinja2')
+def view_summary(request):
     summary = request.context.summary
     paper = summary.paper
-    if 'form.submitted' in request.params:
-        summary.data = request.params['body']
-        next_url = request.route_url('view_paper', arxiv_id=paper.arxiv_id)
-        return HTTPFound(location=next_url)
-    save_url = request.route_url('edit_summary', arxiv_id=paper.arxiv_id)
-    return dict(paper=paper, data=summary.data, save_url=save_url)
+    return dict(paper=paper, summary=summary)
 
 @view_config(route_name='add_tip', renderer='../templates/add_tip.jinja2',
              permission='create')

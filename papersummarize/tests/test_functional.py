@@ -102,10 +102,6 @@ class FunctionalTests(unittest.TestCase):
         res = self.testapp.get('/x/some_id/add_summary', status=302).follow()
         self.assertTrue(b'Login' in res.body)
 
-    def test_anonymous_user_cannot_edit_summary(self):
-        res = self.testapp.get('/x/some_id/add_summary', status=302).follow()
-        self.assertTrue(b'Login' in res.body)
-
     def test_anonymous_user_cannot_add_tip(self):
         res = self.testapp.get('/x/some_id/add_tip', status=302).follow()
         self.assertTrue(b'Login' in res.body)
@@ -114,18 +110,3 @@ class FunctionalTests(unittest.TestCase):
         self.testapp.get(self.editor_login, status=302)
         res = self.testapp.get('/x/some_id/add_tip', status=200)
         self.assertTrue(b'add_tip' in res.body)
-
-    def test_editor_can_edit_summary(self):
-        self.testapp.get(self.editor_login, status=302)
-        res = self.testapp.get('/x/other_id/edit_summary', status=200)
-        self.assertTrue(b'edit_summary' in res.body)
-
-    def test_redirect_to_edit_for_existing_summary(self):
-        self.testapp.get(self.editor_login, status=302)
-        res = self.testapp.get('/x/other_id/add_summary', status=302)
-        self.assertTrue(b'edit_summary' in res.body)
-
-    def test_redirect_to_add_for_nonexistant_summary(self):
-        self.testapp.get(self.editor_login, status=302)
-        res = self.testapp.get('/x/some_id/edit_summary', status=302)
-        self.assertTrue(b'add_summary' in res.body)

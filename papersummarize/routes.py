@@ -17,7 +17,7 @@ def includeme(config):
     # Paper
     config.add_route('view_paper', '/x/{arxiv_id}', factory=paper_factory)
     config.add_route('add_summary', '/x/{arxiv_id}/add_summary', factory=new_summary_factory)
-    config.add_route('edit_summary', '/x/{arxiv_id}/edit_summary', factory=summary_factory)
+    config.add_route('view_summary', '/x/{arxiv_id}/{user_name}', factory=summary_factory)
     config.add_route('add_tip', '/x/{arxiv_id}/add_tip', factory=new_tip_factory)
     config.add_route('view_tip', '/x/{arxiv_id}/{tip_id}', factory=tip_factory)
     config.add_route('delete_tip', '/x/{arxiv_id}/{tip_id}/delete', factory=tip_factory)
@@ -77,7 +77,7 @@ def new_summary_factory(request):
         raise HTTPNotFound
     summary = request.dbsession.query(Summary).filter_by(creator=request.user, paper=paper).first()
     if summary is not None:
-        next_url = request.route_url('edit_summary', arxiv_id=paper.arxiv_id)
+        next_url = request.route_url('view_summary', arxiv_id=paper.arxiv_id, user_name=request.user.name)
         raise HTTPFound(location=next_url)
     return NewSummary(paper)
 
@@ -93,13 +93,16 @@ class NewSummary(object):
 
 def summary_factory(request):
     arxiv_id = request.matchdict['arxiv_id']
+    user_name = request.matchdict['user_name']
     paper = request.dbsession.query(Paper).filter_by(arxiv_id=arxiv_id).first()
     if paper is None:
         raise HTTPNotFound
-    summary = request.dbsession.query(Summary).filter_by(creator=request.user, paper=paper).first()
+    user = request.dbsession.query(User).filter_by(name=user_name).first()
+    if user is None:
+        raise HTTPNotFound
+    summary = request.dbsession.query(Summary).filter_by(creator=user, paper=paper).first()
     if summary is None:
-        next_url = request.route_url('add_summary', arxiv_id=paper.arxiv_id)
-        raise HTTPFound(location=next_url)
+        raise HTTPNotFound
     return SummaryResource(summary)
 
 class SummaryResource(object):

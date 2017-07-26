@@ -9,7 +9,7 @@
 </p>
 <p>
     Summary Count: <strong>{{ num_summaries }}</strong> {% if has_wrote %}
-            (<a href="{{ request.route_url('edit_summary', arxiv_id=paper.arxiv_id) }}">Edit your summary.</a>)
+            (<a href="{{ request.route_url('view_summary', arxiv_id=paper.arxiv_id, user_name=request.user.name) }}">View your summary.</a>)
             {% else %}
             (<a href="{{ request.route_url('add_summary', arxiv_id=paper.arxiv_id) }}">Add a new summary.</a>)
     {% endif %}
@@ -28,7 +28,7 @@ Tip Count: <strong>{{ num_tips }}</strong> (<a href="{{ request.route_url('add_t
     <li>
     <div>
     <p>{{ summary.data }}</p>
-    <p>by <a href="{{ request.route_url('view_user', user_name=summary.creator.name) }}">{{ summary.creator.name }}</a> on {{ summary.created_at_formatted }}</p>
+    <p>by <a href="{{ request.route_url('view_user', user_name=summary.creator.name) }}">{{ summary.creator.name }}</a> on <a href="{{ request.route_url('view_summary', arxiv_id=paper.arxiv_id, user_name=summary.creator.name) }}">{{ summary.created_at_formatted }}</a></p>
     </div>
     </li>
 {% endfor %}
