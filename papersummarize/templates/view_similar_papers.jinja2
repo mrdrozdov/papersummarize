@@ -59,65 +59,15 @@
     {% endif %}
 </div>
 
-<div>
-    <p>
-        <a href="{{ request.route_url('view_similar_papers', arxiv_id=paper_object.arxiv_id) }}">View Similar Papers.</a>
-    </p>
-</div>
-
-<div id="paper-summary-info">
-    <p>
-    Summary Count: <strong>{{ num_summaries }}</strong> {% if has_wrote %}
-            (<a href="{{ request.route_url('view_summary', arxiv_id=paper.arxiv_id, user_name=request.user.name) }}">View your summary.</a>)
-            {% else %}
-            (<a href="{{ request.route_url('add_summary', arxiv_id=paper.arxiv_id) }}">Add a new summary.</a>)
-    {% endif %}
-    </p>
-</div>
-
-<div id="paper-tip-info">
-Tip Count: <strong>{{ num_tips }}</strong> (<a href="{{ request.route_url('add_tip', arxiv_id=paper.arxiv_id) }}">Add a new tip.</a>)
-</div>
-
-{% if summaries is none %}
-<p></p>
-{% else %}
-<div>
-<p>Summaries:</p>
+<div id="paper-similar">
+<p>
+Similar Papers:
+</p>
 <ul>
-{% for summary in summaries %}
-    <li>
-    <div>
-    <p>{{ summary.data }}</p>
-    <p>by <a href="{{ request.route_url('view_user', user_name=summary.creator.name) }}">{{ summary.creator.name }}</a> on <a href="{{ request.route_url('view_summary', arxiv_id=paper.arxiv_id, user_name=summary.creator.name) }}">{{ summary.created_at_formatted }}</a></p>
-    </div>
-    </li>
+{% for paper_object in similar_papers %}
+    <li><a href="{{request.route_url('view_paper', arxiv_id=paper_object.arxiv_id)}}">{{ paper_object.title }}</a></li>
 {% endfor %}
 </ul>
 </div>
-{% endif %}
-
-{% if tips is none %}
-<p></p>
-{% else %}
-<div>
-<p>Tips:</p>
-<ul>
-{% for tip in tips %}
-    <li>
-    <div>
-    <p data-linkify="this">{{ tip.data }}</p>
-    <p>by <a href="{{ request.route_url('view_user', user_name=tip.creator.name) }}">{{ tip.creator.name }}</a> on <a href="{{ request.route_url('view_tip', arxiv_id=paper.arxiv_id, tip_id=tip.id) }}">{{ tip.created_at_formatted }}</a></p>
-    </div>
-    </li>
-{% endfor %}
-</ul>
-</div>
-{% endif %}
 
 {% endblock content %}
-
-{% block js %}
-<script src="{{request.static_url('papersummarize:static/js/shared/linkify.min.js')}}"></script>
-<script src="{{request.static_url('papersummarize:static/js/shared/linkify-jquery.min.js')}}"></script>
-{% endblock %}

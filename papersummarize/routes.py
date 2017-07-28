@@ -16,6 +16,7 @@ def includeme(config):
     config.add_route('logout', '/logout')
     # Paper
     config.add_route('view_paper', '/x/{arxiv_id}', factory=paper_factory)
+    config.add_route('view_similar_papers', '/x/{arxiv_id}/similar', factory=paper_factory)
     config.add_route('add_summary', '/x/{arxiv_id}/create_summary', factory=new_summary_factory)
     config.add_route('view_summary', '/x/{arxiv_id}/{user_name}', factory=summary_factory)
     config.add_route('add_tip', '/x/{arxiv_id}/tips/create', factory=new_tip_factory)
