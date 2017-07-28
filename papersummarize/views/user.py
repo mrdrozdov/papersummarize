@@ -6,6 +6,7 @@ from pyramid.httpexceptions import HTTPFound, HTTPNotFound
 
 from pyramid.view import view_config
 
+from .helpers.paper import paper_cell
 from ..models import Summary, Tag, Tip, PaperRating
 from ..shared import paper_utils
 from ..shared.enums import ENUM_Summary_review_status
@@ -77,4 +78,10 @@ def view_user_taglist(request):
 def view_user_paper_ratings(request):
     user = request.context.user
     ratings = request.dbsession.query(PaperRating).filter_by(creator=user).all()
-    return dict(user=user, ratings=ratings)
+    papers = map(lambda x: x.paper, ratings)
+
+    view_args = dict()
+    view_args['user'] = user
+    view_args['papers'] = map(lambda paper: paper_cell(request, paper), papers)
+
+    return view_args

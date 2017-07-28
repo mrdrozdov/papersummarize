@@ -7,14 +7,8 @@
 
 <p>Ratings by <a href="{{ request.route_url('view_user', user_name=request.matchdict['user_name']) }}">{{ request.matchdict['user_name'] }}</a>.</p>
 
-<ul>
-{% for rating in ratings %}
-<li>
-    <span><strong>{{ rating.rating }}</strong></span>
-    <span><a href="{{ request.route_url('view_paper', arxiv_id=rating.paper.arxiv_id) }}">{{ rating.paper.title }}</a></span>
-    <span><a href="{{ request.route_url('delete_paper_rating', arxiv_id=rating.paper.arxiv_id, paper_rating_id=rating.id) }}">x</a></span>
-    </li>
+{% for paper in papers %}
+{% include('./custom_cells/paper_cell.jinja2') %}
 {% endfor %}
-<ul>
 
 {% endblock content %}
