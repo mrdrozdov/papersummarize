@@ -1,0 +1,46 @@
+<div id="paper-cell">
+    <div class="paper-cell-left">
+        <div class="paper-cell-macroscore">{{ paper.macroscore }}</div>
+        <div class="paper-cell-summaryscore">{{ paper.summaryscore }}</div>
+        <div class="paper-cell-tipscore">{{ paper.tipscore }}</div>
+    </div>
+    <div class="paper-cell-right">
+        <div class="paper-cell-title">
+            <p>
+            {{ paper.title }} ({{ paper.formatted_date }})
+            </p>
+        </div>
+        <div class="paper-cell-authors">
+            <p>
+                {% for author in paper.authors %}
+                <span>{{ author.name }}</span>{% if loop.last %}.{% else %}, {% endif %}
+                {% endfor %}
+            </p>
+        </div>
+        <div class="paper-cell-userdata">
+            <div class="paper-cell-userscore">
+                <p>
+                    {% if paper.userscore %}
+                        {% for index in range(1, 11) %}
+                            {% if index == paper.userscore %}
+                                <span><strong><a href="{{ request.route_url('delete_paper_rating', arxiv_id=paper.arxiv_id) }}">{{ index }}</a></strong></span>
+                            {% else %}
+                                <span><a href="{{ request.route_url('edit_paper_rating', arxiv_id=paper.arxiv_id, rating=index) }}">{{ index }}</a></span>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <span><a href="{{ request.route_url('add_paper_rating', arxiv_id=paper.arxiv_id, rating=index) }}">{{ index }}</a></span>
+                    {% endif %}
+                </p>  
+            </div>
+            <div class="paper-cell-tags">
+                {% for tag in paper.tags %}
+                    <span>
+                    <span><a href="{{request.route_url('view_user_taglist', user_name=request.user.name, tag_name=tag.name)}}">{{ tag.name }}</a></span> 
+                    <span><a href="{{request.route_url('delete_tag', arxiv_id=paper.arxiv_id, tag_name=tag.name)}}">(x)</a></span>
+                    </span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

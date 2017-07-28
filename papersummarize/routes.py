@@ -25,6 +25,7 @@ def includeme(config):
     config.add_route('add_tag', '/x/{arxiv_id}/tags/create', factory=new_tag_factory)
     config.add_route('delete_tag', '/x/{arxiv_id}/tags/{tag_name}/delete', factory=tag_factory)
     config.add_route('add_paper_rating', '/x/{arxiv_id}/ratings/create/{rating}', factory=new_paper_rating_factory)
+    config.add_route('edit_paper_rating', '/x/{arxiv_id}/ratings/edit/{rating}', factory=paper_rating_factory)
     config.add_route('delete_paper_rating', '/x/{arxiv_id}/ratings/delete', factory=paper_rating_factory)
     # User
     config.add_route('view_user', '/u/{user_name}', factory=user_factory)
