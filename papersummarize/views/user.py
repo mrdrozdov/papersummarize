@@ -6,7 +6,8 @@ from pyramid.httpexceptions import HTTPFound, HTTPNotFound
 
 from pyramid.view import view_config
 
-from ..models import Summary, Tip
+from ..models import Summary, Tag, Tip
+from ..shared import paper_utils
 from ..shared.enums import ENUM_Summary_review_status
 from ..shared.url_parsing import parse_arxiv_url
 
@@ -25,7 +26,8 @@ def view_user_activity(request):
     if request.user != user:
         summaries = [s for s in summaries if s.review_status == ENUM_Summary_review_status['reviewed']]
     tips = user.created_tips
-    activities = summaries + tips
+    tags = user.created_tags
+    activities = summaries + tips + tags
     activities = reversed(sorted(activities, key=lambda x: x.created_at))
 
     def create_item_from_activity(a):
@@ -40,6 +42,10 @@ def view_user_activity(request):
             created_at = a.created_at
             text = "Created tip."
             url = request.route_url('view_tip', arxiv_id=a.paper.arxiv_id, tip_id=a.id)
+        elif isinstance(a, Tag):
+            created_at = a.created_at
+            text = "Created tag {} for paper {}.".format(a.name, a.paper.title)
+            url = request.route_url('view_paper', arxiv_id=a.paper.arxiv_id)
         else:
             created_at = a.created_at
             text = "Unknown activity."
@@ -54,3 +60,10 @@ def view_user_activity(request):
     activities = map(create_item_from_activity, activities)
 
     return dict(user=user, activities=activities)
+
+@view_config(route_name='view_user_taglist', renderer='../templates/user_taglist.jinja2')
+def view_user_taglist(request):
+    user = request.context.user
+    tag_name = request.matchdict['tag_name']
+    tags = request.dbsession.query(Tag).filter_by(creator=user, name=tag_name).all()
+    return dict(user=user, tags=tags)

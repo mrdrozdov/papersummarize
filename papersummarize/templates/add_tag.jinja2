@@ -1,0 +1,28 @@
+{% extends 'layout.jinja2' %}
+
+{% block subtitle %} Add Tip {% endblock subtitle %}
+
+{% block content %}
+<p>
+Submit tag for <strong><a href="{{request.route_url('view_paper', arxiv_id=paper.arxiv_id)}}">{{paper.arxiv_id}}</a></strong>
+</p>
+<div id="paper-tags">
+    <p>Tags:</p>
+    <ul>
+    {% for tag in tags %}
+        <li>
+        <span><a href="{{request.route_url('view_user_taglist', user_name=request.user.name, tag_name=tag.name)}}">{{ tag.name }}</a></span> 
+        <span><a href="{{request.route_url('delete_tag', arxiv_id=paper_object.arxiv_id, tag_name=tag.name)}}">x</a></span>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+<form action="{{ save_url }}" method="post">
+<div class="form-group">
+    <input class="form-control" name="body"></input>
+</div>
+<div class="form-group">
+    <button type="submit" name="form.submitted" value="Submit" class="btn btn-default">Submit</button>
+</div>
+</form>
+{% endblock %}

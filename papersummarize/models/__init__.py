@@ -8,6 +8,7 @@ import zope.sqlalchemy
 from .page import Page  # flake8: noqa
 from .paper import Paper  # flake8: noqa
 from .summary import Summary  # flake8: noqa
+from .tag import Tag  # flake8: noqa
 from .tip import Tip  # flake8: noqa
 from .user import User  # flake8: noqa
 

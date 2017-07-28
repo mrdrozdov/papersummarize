@@ -4,7 +4,7 @@
 
 {% block content %}
 <p>{{ content|safe }}</p>
-<p>
+<div id="paper-info">
     <h3><a href="{{request.route_url('view_paper', arxiv_id=paper_object.arxiv_id)}}">{{paper_object.title}}</a></h3>
     <p>
 {% for author in paper_object.authors %}
@@ -15,7 +15,20 @@
     <p>
     {{ paper_object.abstract }}
     </p>
-</p>
+</div>
+{% if request.user %}
+<div id="paper-tags">
+    <p>Tags: (<a href="{{ request.route_url('add_tag', arxiv_id=paper.arxiv_id) }}">Add a new tag.</a>)</p>
+    <ul>
+    {% for tag in tags %}
+        <li>
+        <span><a href="{{request.route_url('view_user_taglist', user_name=request.user.name, tag_name=tag.name)}}">{{ tag.name }}</a></span> 
+        <span><a href="{{request.route_url('delete_tag', arxiv_id=paper_object.arxiv_id, tag_name=tag.name)}}">x</a></span>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endif %}
 <p>
     Summary Count: <strong>{{ num_summaries }}</strong> {% if has_wrote %}
             (<a href="{{ request.route_url('view_summary', arxiv_id=paper.arxiv_id, user_name=request.user.name) }}">View your summary.</a>)

@@ -17,7 +17,7 @@ from ..models import (
     get_session_factory,
     get_tm_session,
     )
-from ..models import User, Paper, Summary, Tip
+from ..models import User, Paper, Summary, Tag, Tip
 from ..shared.enums import ENUM_User_is_leader
 from ..shared.enums import ENUM_Summary_visibility, ENUM_Summary_review_status
 from ..shared.enums import ENUM_Tip_category
@@ -114,3 +114,17 @@ def main(argv=sys.argv):
             data='this is a tip https://github.com/mrdrozdov/spinn',
         )
         dbsession.add(tip)
+
+        tag_one = Tag(
+            creator=editor,
+            paper=other_paper,
+        )
+        tag_one.set_name('tag_one')
+        dbsession.add(tag_one)
+
+        tag_two = Tag(
+            creator=editor,
+            paper=other_paper,
+        )
+        tag_two.set_name('tag_two')
+        dbsession.add(tag_two)

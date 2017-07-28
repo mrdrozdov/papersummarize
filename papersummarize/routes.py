@@ -7,7 +7,7 @@ from pyramid.security import (
     Everyone,
 )
 
-from .models import Page, Paper, Summary, Tip, User
+from .models import Page, Paper, Summary, Tag, Tip, User
 
 def includeme(config):
     config.add_static_view('static', 'static', cache_max_age=3600)
@@ -21,9 +21,12 @@ def includeme(config):
     config.add_route('add_tip', '/x/{arxiv_id}/tips/add_tip', factory=new_tip_factory)
     config.add_route('view_tip', '/x/{arxiv_id}/tips/{tip_id}', factory=tip_factory)
     config.add_route('delete_tip', '/x/{arxiv_id}/tips/{tip_id}/delete', factory=tip_factory)
+    config.add_route('add_tag', '/x/{arxiv_id}/tags/add_tag', factory=new_tag_factory)
+    config.add_route('delete_tag', '/x/{arxiv_id}/tags/{tag_name}/delete', factory=tag_factory)
     # User
     config.add_route('view_user', '/u/{user_name}', factory=user_factory)
     config.add_route('view_user_activity', '/u/{user_name}/activity', factory=user_factory)
+    config.add_route('view_user_taglist', '/t/{user_name}/{tag_name}', factory=user_factory)
     # Page
     config.add_route('view_page', '/{pagename}', factory=page_factory)
     config.add_route('add_page', '/add_page/{pagename}',
@@ -46,6 +49,45 @@ class NewTip(object):
         return [
             (Allow, 'role:editor', 'create'),
             (Allow, 'role:basic', 'create'),
+        ]
+
+def new_tag_factory(request):
+    arxiv_id = request.matchdict['arxiv_id']
+    paper = request.dbsession.query(Paper).filter_by(arxiv_id=arxiv_id).first()
+    if paper is None:
+        raise HTTPNotFound
+    return NewTag(paper)
+
+class NewTag(object):
+    def __init__(self, paper):
+        self.paper = paper
+
+    def __acl__(self):
+        return [
+            (Allow, 'role:editor', 'create'),
+            (Allow, 'role:basic', 'create'),
+        ]
+
+def tag_factory(request):
+    arxiv_id = request.matchdict['arxiv_id']
+    tag_name = request.matchdict['tag_name']
+    paper = request.dbsession.query(Paper).filter_by(arxiv_id=arxiv_id).first()
+    if paper is None:
+        raise HTTPNotFound
+    tag = request.dbsession.query(Tag).filter_by(name=tag_name, paper=paper).first()
+    if tag is None:
+        raise HTTPNotFound
+    return TagResource(tag)
+
+class TagResource(object):
+    def __init__(self, tag):
+        self.tag = tag
+
+    def __acl__(self):
+        return [
+            (Allow, Everyone, 'view'),
+            (Allow, 'role:editor', 'edit'),
+            (Allow, str(self.tag.creator_id), 'edit'),
         ]
 
 def tip_factory(request):

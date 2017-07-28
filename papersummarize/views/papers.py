@@ -7,7 +7,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from ..shared import paper_utils
-from ..models import Paper, Summary, Tip
+from ..models import Paper, Summary, Tag, Tip
 from ..shared.enums import ENUM_User_is_leader, ENUM_Summary_visibility, ENUM_Summary_review_status
 
 @view_config(route_name='view_paper', renderer='../templates/paper.jinja2',
@@ -43,8 +43,10 @@ def view_paper(request):
             summaries = request.dbsession.query(Summary).filter_by(paper=paper, review_status=ENUM_Summary_review_status['reviewed']).all()
         else:
             summaries = request.dbsession.query(Summary).filter_by(paper=paper, review_status=ENUM_Summary_visibility['public']).all()
+        tags = request.dbsession.query(Tag).filter_by(creator=request.user, paper=paper).all()
     else:
         summaries = request.dbsession.query(Summary).filter_by(paper=paper, visibility=ENUM_Summary_visibility['public']).all()
+        tags = None
     tips = request.dbsession.query(Tip).filter_by(paper=paper).all()
     num_tips = request.dbsession.query(Tip).filter_by(paper=paper).count()
 
@@ -61,7 +63,8 @@ def view_paper(request):
         num_summaries=num_summaries,
         summaries=map(add_date, summaries),
         tips=map(add_date, tips),
-        num_tips=num_tips)
+        num_tips=num_tips,
+        tags=tags)
 
 @view_config(route_name='add_summary', renderer='../templates/add_summary.jinja2',
              permission='create')
@@ -109,4 +112,31 @@ def delete_tip(request):
     arxiv_id = paper.arxiv_id
     request.dbsession.delete(tip)
     next_url = request.route_url('view_paper', arxiv_id=arxiv_id)
+    return HTTPFound(location=next_url)
+
+@view_config(route_name='add_tag', renderer='../templates/add_tag.jinja2',
+             permission='create')
+def add_tag(request):
+    paper = request.context.paper
+    user = request.user
+    if 'form.submitted' in request.params:
+        tag_name = request.params['body']
+        tag = Tag(creator=request.user, paper=paper)
+        tag.set_name(tag_name)
+        request.dbsession.add(tag)
+        next_url = request.route_url('view_paper', arxiv_id=paper.arxiv_id)
+        return HTTPFound(location=next_url)
+    tags = request.dbsession.query(Tag).filter_by(creator=user, paper=paper).all()
+    save_url = request.route_url('add_tag', arxiv_id=paper.arxiv_id)
+    return dict(paper=paper, save_url=save_url, tags=tags)
+
+@view_config(route_name='delete_tag', permission='edit')
+def delete_tag(request):
+    next_url = request.params.get('next', request.referrer)
+    if not next_url:
+        next_url = request.route_url('home')
+    tag = request.context.tag
+    paper = tag.paper
+    arxiv_id = paper.arxiv_id
+    request.dbsession.delete(tag)
     return HTTPFound(location=next_url)
