@@ -26,7 +26,7 @@ class Paper(Base):
     link = Column(Text, nullable=False)
     links = Column(Text)
     published = Column(DateTime, nullable=False)
-    summary = Column(Text)
+    abstract = Column(Text) # summary
     tags = Column(Text)
     title = Column(Text, nullable=False)
     updated = Column(DateTime, nullable=False)

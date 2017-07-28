@@ -5,7 +5,16 @@
 {% block content %}
 <p>{{ content|safe }}</p>
 <p>
-    <h3><a href="{{request.route_url('view_paper', arxiv_id=paper.arxiv_id)}}">{{paper.arxiv_id}}</a></h3>
+    <h3><a href="{{request.route_url('view_paper', arxiv_id=paper_object.arxiv_id)}}">{{paper_object.title}}</a></h3>
+    <p>
+{% for author in paper_object.authors %}
+    {{ author.name }}{% if loop.last %}.{% else %}, {% endif %}
+{% endfor %}
+    </p>
+    <p>published at {{paper_object.published}}</p>
+    <p>
+    {{ paper_object.abstract }}
+    </p>
 </p>
 <p>
     Summary Count: <strong>{{ num_summaries }}</strong> {% if has_wrote %}

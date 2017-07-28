@@ -6,6 +6,7 @@ from pyramid.httpexceptions import HTTPFound
 
 from pyramid.view import view_config
 
+from ..shared import paper_utils
 from ..models import Paper, Summary, Tip
 from ..shared.enums import ENUM_User_is_leader, ENUM_Summary_visibility, ENUM_Summary_review_status
 
@@ -55,6 +56,7 @@ def view_paper(request):
         return o
 
     return dict(paper=paper,
+        paper_object=paper_utils.paper_object(paper),
         has_wrote=has_wrote,
         num_summaries=num_summaries,
         summaries=map(add_date, summaries),

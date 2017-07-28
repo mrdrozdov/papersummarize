@@ -10,6 +10,7 @@ from pyramid.paster import (
 
 from pyramid.scripts.common import parse_vars
 
+from ..shared import paper_utils
 from ..models.meta import Base
 from ..models import (
     get_engine,
@@ -28,24 +29,6 @@ def usage(argv):
           '(example: "%s development.ini")' % (cmd, cmd))
     sys.exit(1)
 
-def stub_paper(arxiv_id):
-    paper = Paper(arxiv_id=arxiv_id)
-    paper._rawid = 'fake'
-    paper._version = 'fake'
-    paper.arxiv_comment = 'fake'
-    paper.arxiv_primary_category = 'fake'
-    paper.author = 'fake'
-    paper.author_detail = 'fake'
-    paper.authors = 'fake'
-    paper.link = 'fake'
-    paper.links = 'fake'
-    paper.published = datetime.now()
-    paper.summary = 'fake'
-    paper.tags = 'fake'
-    paper.title = 'fake'
-    paper.updated = datetime.now()
-    return paper
-
 def main(argv=sys.argv):
     if len(argv) < 2:
         usage(argv)
@@ -62,6 +45,9 @@ def main(argv=sys.argv):
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
 
+        some_paper = dbsession.query(Paper).filter_by(arxiv_id=paper_utils.some_paper_id).first()
+        other_paper = dbsession.query(Paper).filter_by(arxiv_id=paper_utils.other_paper_id).first()
+
         editor = User(name='editor', role='editor', is_leader=ENUM_User_is_leader['True'])
         editor.set_password('editor')
         dbsession.add(editor)
@@ -76,13 +62,6 @@ def main(argv=sys.argv):
             basic_user.set_password('basic')
             dbsession.add(basic_user)
             basic_users.append(basic_user)
-
-        some_paper = stub_paper(arxiv_id='some_id')
-        dbsession.add(some_paper)
-
-        other_paper_id = 'other_id'
-        other_paper = stub_paper(arxiv_id=other_paper_id)
-        dbsession.add(other_paper)
 
         summary_unaccepted = Summary(
             creator=basic_users[0],

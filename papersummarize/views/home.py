@@ -6,11 +6,15 @@ from pyramid.httpexceptions import HTTPFound, HTTPNotFound
 
 from pyramid.view import view_config
 
+from ..shared import paper_utils
+from ..models import Paper
 from ..shared.url_parsing import parse_arxiv_url
 
 @view_config(route_name='home', renderer='../templates/home.jinja2')
 def home(request):
-    papers_to_show = ['some_id', 'other_id']
+    papers_to_show = map(paper_utils.paper_object, request.dbsession.query(Paper).limit(10).all())
+    papers_to_show += map(paper_utils.paper_object, map(paper_utils.stub_paper, ['some_id', 'other_id']))
+
     if 'form.submitted.view' in request.params or 'form.submitted.summarize' in request.params:
         body = request.params['body']
 
