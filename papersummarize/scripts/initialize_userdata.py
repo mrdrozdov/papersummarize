@@ -17,7 +17,7 @@ from ..models import (
     get_session_factory,
     get_tm_session,
     )
-from ..models import User, Paper, Summary, Tag, Tip
+from ..models import User, Paper, PaperRating, Summary, Tag, Tip
 from ..shared.enums import ENUM_User_is_leader
 from ..shared.enums import ENUM_Summary_visibility, ENUM_Summary_review_status
 from ..shared.enums import ENUM_Tip_category
@@ -128,3 +128,17 @@ def main(argv=sys.argv):
         )
         tag_two.set_name('tag_two')
         dbsession.add(tag_two)
+
+        rating_one = PaperRating(
+            creator=editor,
+            paper=other_paper,
+        )
+        rating_one.set_rating(5)
+        dbsession.add(rating_one)
+
+        rating_two = PaperRating(
+            creator=editor,
+            paper=some_paper,
+        )
+        rating_two.set_rating(10)
+        dbsession.add(rating_two)

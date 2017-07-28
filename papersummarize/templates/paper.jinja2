@@ -29,16 +29,47 @@
     </ul>
 </div>
 {% endif %}
-<p>
+
+<div id="paper-rating-info">
+    <p>
+        <span>Total Score:</span>
+        <span><strong>{{ total_rating }}</strong> (from {{ num_ratings }} ratings)</span>
+    </p>
+
+    {% if has_rated_paper %}
+    <p>
+        <span>Your Rating:</span>
+        <span><strong>{{ your_paper_rating.rating }}</strong></span>
+        <span><a href="{{request.route_url('delete_paper_rating', arxiv_id=paper_object.arxiv_id) }}">x</a></span>
+    </p>
+    {% else %}
+    <p>
+        <span>Add Rating:</span>
+        <span><a href="{{ request.route_url('add_paper_rating', arxiv_id=paper_object.arxiv_id, rating=1) }}">1</a></span>
+        <span><a href="{{ request.route_url('add_paper_rating', arxiv_id=paper_object.arxiv_id, rating=2) }}">2</a></span>
+        <span><a href="{{ request.route_url('add_paper_rating', arxiv_id=paper_object.arxiv_id, rating=3) }}">3</a></span>
+        <span><a href="{{ request.route_url('add_paper_rating', arxiv_id=paper_object.arxiv_id, rating=4) }}">4</a></span>
+        <span><a href="{{ request.route_url('add_paper_rating', arxiv_id=paper_object.arxiv_id, rating=5) }}">5</a></span>
+        <span><a href="{{ request.route_url('add_paper_rating', arxiv_id=paper_object.arxiv_id, rating=6) }}">6</a></span>
+        <span><a href="{{ request.route_url('add_paper_rating', arxiv_id=paper_object.arxiv_id, rating=7) }}">7</a></span>
+        <span><a href="{{ request.route_url('add_paper_rating', arxiv_id=paper_object.arxiv_id, rating=8) }}">8</a></span>
+        <span><a href="{{ request.route_url('add_paper_rating', arxiv_id=paper_object.arxiv_id, rating=9) }}">9</a></span>
+        <span><a href="{{ request.route_url('add_paper_rating', arxiv_id=paper_object.arxiv_id, rating=10) }}">10</a></span>
+    </p>  
+    {% endif %}
+</div>
+
+<div id="paper-summary-info">
     Summary Count: <strong>{{ num_summaries }}</strong> {% if has_wrote %}
             (<a href="{{ request.route_url('view_summary', arxiv_id=paper.arxiv_id, user_name=request.user.name) }}">View your summary.</a>)
             {% else %}
             (<a href="{{ request.route_url('add_summary', arxiv_id=paper.arxiv_id) }}">Add a new summary.</a>)
     {% endif %}
-</p>
-<p>
+</div>
+
+<div id="paper-tip-info">
 Tip Count: <strong>{{ num_tips }}</strong> (<a href="{{ request.route_url('add_tip', arxiv_id=paper.arxiv_id) }}">Add a new tip.</a>)
-</p>
+</div>
 
 {% if summaries is none %}
 <p></p>

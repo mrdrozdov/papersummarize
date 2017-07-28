@@ -7,7 +7,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from ..shared import paper_utils
-from ..models import Paper, Summary, Tag, Tip
+from ..models import Paper, PaperRating, Summary, Tag, Tip
 from ..shared.enums import ENUM_User_is_leader, ENUM_Summary_visibility, ENUM_Summary_review_status
 
 @view_config(route_name='view_paper', renderer='../templates/paper.jinja2',
@@ -47,8 +47,23 @@ def view_paper(request):
     else:
         summaries = request.dbsession.query(Summary).filter_by(paper=paper, visibility=ENUM_Summary_visibility['public']).all()
         tags = None
+
+    # Tips
     tips = request.dbsession.query(Tip).filter_by(paper=paper).all()
     num_tips = request.dbsession.query(Tip).filter_by(paper=paper).count()
+
+    # Paper Ratings
+    paper_ratings = paper.created_paper_ratings
+    num_ratings = len(paper_ratings)
+    total_rating = sum(map(lambda x: x.rating, paper_ratings))
+
+    # Your Paper Rating
+    if request.user is not None:
+        your_paper_rating = request.dbsession.query(PaperRating).filter_by(creator=request.user, paper=paper).first()
+        has_rated_paper = your_paper_rating is not None
+    else:
+        your_paper_rating = None
+        has_rated_paper = False
 
     def format_date(d):
         return d.strftime("%B %d, %Y")
@@ -64,7 +79,11 @@ def view_paper(request):
         summaries=map(add_date, summaries),
         tips=map(add_date, tips),
         num_tips=num_tips,
-        tags=tags)
+        tags=tags,
+        total_rating=total_rating,
+        num_ratings=num_ratings,
+        your_paper_rating=your_paper_rating,
+        has_rated_paper=has_rated_paper)
 
 @view_config(route_name='add_summary', renderer='../templates/add_summary.jinja2',
              permission='create')
@@ -136,7 +155,26 @@ def delete_tag(request):
     if not next_url:
         next_url = request.route_url('home')
     tag = request.context.tag
-    paper = tag.paper
-    arxiv_id = paper.arxiv_id
     request.dbsession.delete(tag)
+    return HTTPFound(location=next_url)
+
+@view_config(route_name='add_paper_rating', permission='create')
+def add_paper_rating(request):
+    rating = request.matchdict['rating']
+    paper = request.context.paper
+    paper_rating = PaperRating(creator=request.user, paper=paper)
+    paper_rating.set_rating(rating)
+    request.dbsession.add(paper_rating)
+    next_url = request.params.get('next', request.referrer)
+    if not next_url:
+        next_url = request.route_url('view_paper', arxiv_id=paper.arxiv_id)
+    return HTTPFound(location=next_url)
+
+@view_config(route_name='delete_paper_rating', permission='edit')
+def delete_paper_rating(request):
+    next_url = request.params.get('next', request.referrer)
+    if not next_url:
+        next_url = request.route_url('home')
+    paper_rating = request.context.paper_rating
+    request.dbsession.delete(paper_rating)
     return HTTPFound(location=next_url)
