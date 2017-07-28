@@ -58,13 +58,11 @@ def paper_cell(request, paper):
     }
     """
 
-    args = dict()
-
-    args['paper'] = paper_for_paper_cell(paper)
-    args['paper']['macroscore'] = macroscore(request, paper)
-    args['paper']['summaryscore'] = summaryscore(request, paper)
-    args['paper']['tipscore'] = tipscore(request, paper)
-    args['paper']['userscore'] = userscore(request, paper)
-    args['paper']['tags'] = tags_for_paper_cell(request, paper)
+    args = paper_for_paper_cell(paper)
+    args['macroscore'] = macroscore(request, paper)
+    args['summaryscore'] = summaryscore(request, paper)
+    args['tipscore'] = tipscore(request, paper)
+    args['userscore'] = userscore(request, paper)
+    args['tags'] = tags_for_paper_cell(request, paper)
 
     return args

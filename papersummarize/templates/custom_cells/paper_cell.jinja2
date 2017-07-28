@@ -20,17 +20,17 @@
         <div class="paper-cell-userdata">
             <div class="paper-cell-userscore">
                 <p>
-                    {% if paper.userscore %}
-                        {% for index in range(1, 11) %}
+                    {% for index in range(1, 11) %}
+                        {% if paper.userscore %}
                             {% if index == paper.userscore %}
                                 <span><strong><a href="{{ request.route_url('delete_paper_rating', arxiv_id=paper.arxiv_id) }}">{{ index }}</a></strong></span>
                             {% else %}
                                 <span><a href="{{ request.route_url('edit_paper_rating', arxiv_id=paper.arxiv_id, rating=index) }}">{{ index }}</a></span>
                             {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        <span><a href="{{ request.route_url('add_paper_rating', arxiv_id=paper.arxiv_id, rating=index) }}">{{ index }}</a></span>
-                    {% endif %}
+                        {% else %}
+                            <span><a href="{{ request.route_url('add_paper_rating', arxiv_id=paper.arxiv_id, rating=index) }}">{{ index }}</a></span>
+                        {% endif %}
+                    {% endfor %}
                 </p>  
             </div>
             <div class="paper-cell-tags">

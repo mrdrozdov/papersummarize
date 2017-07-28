@@ -34,7 +34,7 @@ def view_paper(request):
     paper = request.context.paper
 
     view_args = dict()
-    view_args.update(paper_cell(request, paper))
+    view_args['paper'] = paper_cell(request, paper)
 
     # summary = request.dbsession.query(Summary).filter_by(creator=request.user, paper=paper).first()
     # has_wrote = summary is not None

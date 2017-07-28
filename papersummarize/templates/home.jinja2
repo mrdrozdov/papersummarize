@@ -4,20 +4,9 @@
 
 {% block content %}
 
-{% if papers_to_show is none %}
-<p></p>
-{% else %}
-<p>
-Please view one of these papers.
-</p>
-
-<ul>
-{% for paper_object in papers_to_show %}
-    <li><a href="{{request.route_url('view_paper', arxiv_id=paper_object.arxiv_id)}}">{{ paper_object.title }}</a></li>
+{% for paper in papers %}
+{% include('./custom_cells/paper_cell.jinja2') %}
 {% endfor %}
-</ul>
-
-{% endif %}
 
 <p>
 Paste an <a href="https://arxiv.org">arXiv</a> ID to view or summarize a paper.
