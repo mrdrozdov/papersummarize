@@ -110,7 +110,7 @@ def main(argv=sys.argv):
         tip = Tip(
             creator=editor,
             paper=other_paper,
-            category=ENUM_Tip_category['other'],
+            category=ENUM_Tip_category['useful_text'],
             data='this is a tip https://github.com/mrdrozdov/spinn',
         )
         dbsession.add(tip)

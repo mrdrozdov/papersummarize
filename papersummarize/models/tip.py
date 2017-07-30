@@ -20,7 +20,7 @@ class Tip(Base):
     creator_id = Column(ForeignKey('users.id'), nullable=False)
     created_at = Column(DateTime, default=datetime.now)
 
-    category = Column(Text, nullable=False) # ENUM_Tip_category
+    category = Column(Integer, nullable=False) # ENUM_Tip_category
     data = Column(Text, nullable=False)
 
     creator = relationship('User', backref='created_tips')

@@ -2,7 +2,7 @@ from pyramid.compat import escape
 import re
 from docutils.core import publish_parts
 
-from pyramid.httpexceptions import HTTPFound
+from pyramid.httpexceptions import HTTPFound, HTTPNotFound
 
 from pyramid.view import view_config
 
@@ -11,7 +11,7 @@ from .helpers.summary import summaries_for_paper, summary_cell
 from .helpers.tip import tip_cell
 from ..shared import paper_utils
 from ..models import Paper, PaperRating, Summary, Tag, Tip
-from ..shared.enums import ENUM_User_is_leader, ENUM_Summary_visibility, ENUM_Summary_review_status
+from ..shared.enums import ENUM_User_is_leader, ENUM_Summary_visibility, ENUM_Summary_review_status, ENUM_Tip_category
 
 @view_config(route_name='view_paper', renderer='../templates/paper.jinja2',
              permission='view')
@@ -66,10 +66,14 @@ def add_tip(request):
     paper = request.context.paper
     if 'form.submitted' in request.params:
         body = request.params['body']
-        tip = Tip(creator=request.user, paper=paper, data=body)
+        category = request.params['category']
+        if not category in ENUM_Tip_category.keys():
+            raise HTTPNotFound
+        tip = Tip(creator=request.user, paper=paper, data=body, category=ENUM_Tip_category[category])
         request.dbsession.add(tip)
         next_url = request.route_url('view_paper', arxiv_id=paper.arxiv_id)
         return HTTPFound(location=next_url)
+
     save_url = request.route_url('add_tip', arxiv_id=paper.arxiv_id)
     return dict(paper=paper, save_url=save_url)
 

@@ -1,15 +1,55 @@
 {% extends 'layout.jinja2' %}
 
-{% block subtitle %} Add Tip {% endblock subtitle %}
-
 {% block content %}
-<p>
-Submit tip for <strong><a href="{{request.route_url('view_paper', arxiv_id=paper.arxiv_id)}}">{{paper.arxiv_id}}</a></strong>
-</p>
-<div id="react-root">
-</div>
-{% endblock content %}
 
-{% block js %}
-<script src="{{request.static_url('papersummarize:static/js/add_tip.js')}}"></script>
-{% endblock %}
+<p>
+<span>add_tip</span>
+<span><a href="{{ request.route_url('view_paper', arxiv_id=paper.arxiv_id) }}">{{ paper.title }}</a></span>
+</p>
+
+<form action="{{ save_url }}" class="form-horizontal">
+  <textarea hidden name="category">github_url</textarea>
+  <div class="form-group">
+    <label for="githubUrl" class="col-sm-2 control-label">Github URL</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="githubUrl" name="body" placeholder="Enter github url.">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" name="form.submitted" class="btn btn-default">Submit</button>
+    </div>
+  </div>
+</form>
+
+<form action="{{ save_url }}" class="form-horizontal">
+<textarea hidden name="category">blogpost_url</textarea>
+  <div class="form-group">
+    <label for="blogpostUrl" class="col-sm-2 control-label">Blogpost URL</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="blogpostUrl" name="body" placeholder="Enter blogpost url.">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" name="form.submitted" class="btn btn-default">Submit</button>
+    </div>
+  </div>
+</form>
+
+<form action="{{ save_url }}" class="form-horizontal">
+<textarea hidden name="category">useful_text</textarea>
+  <div class="form-group">
+    <label for="usefulText" class="col-sm-2 control-label">Useful Text</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="usefulText" name="body" placeholder="Enter useful text related to the paper.">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" name="form.submitted" class="btn btn-default">Submit</button>
+    </div>
+  </div>
+</form>
+
+{% endblock content %}
