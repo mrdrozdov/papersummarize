@@ -1,0 +1,19 @@
+<div class="tip-cell row" style="margin-bottom: 10px;">
+    <div class="tip-cell-data row col-xs-12">
+        <div class="col-xs-12" data-linkify="this">
+            {{ tip._tip.data }}
+        </div>
+    </div>
+    <div class="tip-cell-info row col-xs-12">
+        <div class="col-xs-12">
+            {% if request.user == tip._tip.creator %}
+                <span><strong><a href="{{ request.route_url('view_user', user_name=tip._tip.creator.name) }}">{{ tip._tip.creator.name }}</a></strong></span>
+            {% else %}
+                <span><a href="{{ request.route_url('view_user', user_name=tip._tip.creator.name) }}">{{ tip._tip.creator.name }}</a></span>
+            {% endif %}
+            <span style="margin-left: 5px; margin-right: 5px;">-</span>
+            <span><a href="{{ request.route_url('view_tip', arxiv_id=tip._tip.paper.arxiv_id, tip_id=tip._tip.id) }}">{{ tip.formatted_date }}</a></span>
+            <span><a href="{{request.route_url('delete_tip', arxiv_id=paper.arxiv_id, tip_id=tip._tip.id) }}" class="tag-close close" aria-label="Close" aria-hidden="true"><span>&times;</span></a></span>
+        </div>
+    </div>
+</div>

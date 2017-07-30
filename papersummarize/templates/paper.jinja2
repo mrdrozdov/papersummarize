@@ -26,9 +26,19 @@
     </div>
 </div>
 
-<div class="row" style="text-align: center;">
+<div class="row" style="text-align: center; margin-bottom: 10px;">
     <div class="col-xs-12">
-        Tips
+        <span>Tips</span>
+        <span>-</span>
+        <span><a href="{{ request.route_url('add_tip', arxiv_id=paper.arxiv_id) }}">add</a></span>
+    </div>
+</div>
+
+<div class="row" style="margin-bottom: 10px;">
+    <div class="col-xs-12">
+        {% for tip in tips %}
+        {% include('./custom_cells/tip_cell.jinja2') %}
+        {% endfor %}
     </div>
 </div>
 

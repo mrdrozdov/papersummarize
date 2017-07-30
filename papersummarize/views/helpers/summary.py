@@ -9,6 +9,23 @@ def summary_cell(summary):
     return result
 
 def summaries_for_paper(request, paper):
+    """
+    Summary {
+        visibility: public | members,
+        review_status: reviewed | under_review,
+    }
+
+    Constraints:
+        - in order to be public, the summary must be reviewed (not all reviewed summaries are public)
+
+    Different Levels of "Visibility"
+
+    - Public: Everyone can see it. { visibility=public, review_status=reviewed }
+    - Members+Reviewed: People that have written a summary (for this paper) can see it. { visibility=members, review_status=under_review }
+    - Members+UnderReview: People that have written a summary (for this paper) can see it, only if their summary has been reviewed. { visibility=members, review_status=under_review }
+
+    """
+
     if request.user is not None:
         user_summary = request.dbsession.query(Summary).filter_by(creator=request.user, paper=paper).first()
         if user_summary is not None:
