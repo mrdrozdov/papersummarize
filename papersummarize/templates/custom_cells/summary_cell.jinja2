@@ -1,0 +1,18 @@
+<div class="summary-cell row" style="margin-bottom: 10px;">
+    <div class="summary-cell-data row col-xs-12">
+        <div class="col-xs-12" data-linkify="this">
+            {{ summary._summary.data }}
+        </div>
+    </div>
+    <div class="summary-cell-info row col-xs-12">
+        <div class="col-xs-12">
+            {% if request.user == summary._summary.creator %}
+                <span><strong><a href="{{ request.route_url('view_user', user_name=summary._summary.creator.name) }}">{{ summary._summary.creator.name }}</a></strong></span>
+            {% else %}
+                <span><a href="{{ request.route_url('view_user', user_name=summary._summary.creator.name) }}">{{ summary._summary.creator.name }}</a></span>
+            {% endif %}
+            <span style="margin-left: 5px; margin-right: 5px;">-</span>
+            <span><a href="{{ request.route_url('view_summary', arxiv_id=summary._summary.paper.arxiv_id, user_name=summary._summary.creator.name) }}">{{ summary.formatted_date }}</a></span>
+        </div>
+    </div>
+</div>

@@ -18,6 +18,14 @@
     </div>
 </div>
 
+<div class="row" style="margin-bottom: 10px;">
+    <div class="col-xs-12">
+        {% for summary in summaries %}
+        {% include('./custom_cells/summary_cell.jinja2') %}
+        {% endfor %}
+    </div>
+</div>
+
 <div class="row" style="text-align: center;">
     <div class="col-xs-12">
         Tips

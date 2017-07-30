@@ -1,14 +1,13 @@
 {% extends 'layout.jinja2' %}
 
-{% block subtitle %}Summarize - {% endblock subtitle %}
-
 {% block content %}
 <p>
-Submit summary for <strong><a href="{{request.route_url('view_paper', arxiv_id=paper.arxiv_id)}}">{{paper.arxiv_id}}</a></strong>
+<span>summary</span>
+<span><a href="{{request.route_url('view_paper', arxiv_id=summary._summary.paper.arxiv_id)}}">{{summary._summary.paper.arxiv_id}}</a></span>
+<span>/</span>
+<span><a href="{{request.route_url('view_user', user_name=summary._summary.creator.name)}}">{{summary._summary.creator.name}}</a></span>
 </p>
-<form>
-<div class="form-group">
-    <textarea class="form-control" name="body" rows="10" cols="60" disabled>{{ summary.data }}</textarea>
-</div>
-</form>
+
+{% include('./custom_cells/summary_cell.jinja2') %}
+
 {% endblock content %}

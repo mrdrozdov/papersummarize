@@ -7,6 +7,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from .helpers.paper import paper_cell
+from .helpers.summary import summaries_for_paper, summary_cell
 from ..shared import paper_utils
 from ..models import Paper, PaperRating, Summary, Tag, Tip
 from ..shared.enums import ENUM_User_is_leader, ENUM_Summary_visibility, ENUM_Summary_review_status
@@ -37,6 +38,7 @@ def view_paper(request):
     view_args = dict()
     view_args['paper'] = paper_cell(request, paper)
     view_args['summary'] = summary
+    view_args['summaries'] = map(lambda summary: summary_cell(summary), summaries_for_paper(request, paper))
 
     # has_wrote = summary is not None
     # has_been_reviewed = has_wrote and summary.review_status == ENUM_Summary_review_status['reviewed']
@@ -120,8 +122,9 @@ def add_summary(request):
 @view_config(route_name='view_summary', renderer='../templates/view_summary.jinja2')
 def view_summary(request):
     summary = request.context.summary
-    paper = summary.paper
-    return dict(paper=paper, summary=summary)
+    view_args = dict()
+    view_args['summary'] = summary_cell(summary)
+    return view_args
 
 @view_config(route_name='add_tip', renderer='../templates/add_tip.jinja2',
              permission='create')
