@@ -28,7 +28,7 @@ p {
   font-weight: 700;
 }
 .starter-template {
-  margin-top: 250px;
+  margin-top: 20px;
 }
 .starter-template .content {
   margin-left: 10px;
@@ -108,9 +108,7 @@ p {
   }
 }
 @media (max-width: 991px) {
-  .starter-template {
-    margin-top: 0;
-  }
+  .starter-template {}
   .starter-template .logo {
     margin: 40px auto;
   }
@@ -155,4 +153,29 @@ p {
 }
 a {
   text-decoration: none;
+}
+
+/* PaperSummarize */
+
+body {
+  min-width: 644px;
+}
+
+.main {
+  max-width: 1000px;
+}
+
+.main-nav {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* paper_cell */
+
+.paper-cell {
+  margin: 0 0 10px;
+}
+
+.tag-close {
+  float: none !important;
 }

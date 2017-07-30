@@ -11,7 +11,8 @@
     <title>{% block subtitle %}{% endblock %}Pyramid tutorial wiki (based on TurboGears 20-Minute Wiki)</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="{{request.static_url('papersummarize:static/vendor/bootstrap.min.css')}}" rel="stylesheet">
 
     <!-- Custom styles for this scaffold -->
     <link href="{{request.static_url('papersummarize:static/theme.css')}}" rel="stylesheet">
@@ -26,40 +27,52 @@
   <body>
 
     <div class="starter-template">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-2">
-            <p>
-              <a href="/">Paper Summarize</a>
-            </p>
+      <div class="container main">
+        <div class="row" style="margin-bottom: 10px;">
+          <div class="col-xs-8">
+            <div>
+              <span>
+                <a href="/">Paper Summarize</a>
+              </span>
+              <span style="margin-left: 5px; margin-right: 5px;">|</span>
+              <span>Research, in your own words.</span>
+            </div>
+            <div>
+              Built by <a href="https://twitter.com/mrdrozdov">@mrdrozdov</a>.
+            </div>
+            <div>
+              <a href="https://github.com/mrdrozdov/papersummarize">Contribute</a>.
+            </div>
           </div>
-          <div class="col-md-10">
+          <div class="col-xs-4">
             <div class="content">
             {% if request.user is none %}
-            <p class="pull-right">
+            <span class="pull-right">
             <a href="{{ request.route_url('login') }}">login</a>
-            </p>
+            </span>
             {% else %}
-            <p class="pull-right">
+            <span class="pull-right">
             <a href="{{ request.route_url('view_user', user_name=request.user.name) }}">{{request.user.name}}</a> | <a href="{{request.route_url('logout')}}">logout</a>
-            </p>
+            </span>
             {% endif %}
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-2">
-            <p>
-              Research in your own words.
-            </p>
-            <p>
-              Built by <a href="https://twitter.com/mrdrozdov">@mrdrozdov</a>.
-            </p>
-            <p>
-              <a href="https://github.com/mrdrozdov/papersummarize">Contribute</a>.
-            </p>
+        <div class="main-nav row">
+          <div class="col-xs-12">
+            <span><a href="#">home</a></span>
+            <span class="nav-divider">|</span>
+            <span><a href="#">new</a></span>
+            <span class="nav-divider">|</span>
+            <span><a href="#">top</a></span>
+            <span class="nav-divider">|</span>
+            <span><a href="#">summaries</a></span>
+            <span class="nav-divider">|</span>
+            <span><a href="#">tips</a></span>
           </div>
-          <div class="col-md-10">
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
             {% block content %}{% endblock %}
           </div>
         </div>
@@ -70,8 +83,10 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="//oss.maxcdn.com/libs/jquery/1.10.2/jquery.min.js" integrity="sha384-aBL3Lzi6c9LNDGvpHkZrrm3ZVsIwohDD7CDozL0pk8FwCrfmV7H9w8j3L7ikEv6h" crossorigin="anonymous"></script>
-    <script src="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js" integrity="sha384-s1ITto93iSMDxlp/79qhWHi+LsIi9Gx6yL+cOKDuymvihkfol83TYbLbOw+W/wv4" crossorigin="anonymous"></script>
+    <!-- <script src="//oss.maxcdn.com/libs/jquery/1.10.2/jquery.min.js" integrity="sha384-aBL3Lzi6c9LNDGvpHkZrrm3ZVsIwohDD7CDozL0pk8FwCrfmV7H9w8j3L7ikEv6h" crossorigin="anonymous"></script> -->
+    <!-- <script src="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js" integrity="sha384-s1ITto93iSMDxlp/79qhWHi+LsIi9Gx6yL+cOKDuymvihkfol83TYbLbOw+W/wv4" crossorigin="anonymous"></script> -->
+    <script src="{{request.static_url('papersummarize:static/vendor/jquery.min.js')}}" integrity="sha384-aBL3Lzi6c9LNDGvpHkZrrm3ZVsIwohDD7CDozL0pk8FwCrfmV7H9w8j3L7ikEv6h" crossorigin="anonymous"></script>
+    <script src="{{request.static_url('papersummarize:static/vendor/bootstrap.min.js')}}" integrity="sha384-s1ITto93iSMDxlp/79qhWHi+LsIi9Gx6yL+cOKDuymvihkfol83TYbLbOw+W/wv4" crossorigin="anonymous"></script>
 
     <!-- Other JavaScript
     ================================================== -->

@@ -5,17 +5,17 @@ from ...models import PaperRating, Tag
 
 def macroscore(request, paper):
     # TODO
-    return None
+    return 0
 
 
 def summaryscore(request, paper):
     # TODO
-    return None
+    return 0
 
 
 def tipscore(request, paper):
     # TODO
-    return None
+    return 0
 
 
 def userscore(request, paper):

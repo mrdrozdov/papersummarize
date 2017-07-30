@@ -5,15 +5,10 @@
 {% block content %}
 <p>{{ content|safe }}</p>
 
-<p>Tags by <a href="{{ request.route_url('view_user', user_name=request.matchdict['user_name']) }}">{{ request.matchdict['user_name'] }}</a> with name <a href="{{ request.route_url('view_user_taglist', user_name=request.matchdict['user_name'], tag_name=request.matchdict['tag_name']) }}">{{ request.matchdict['tag_name'] }}</a>.</p>
+<p>taglist <a href="{{ request.route_url('view_user', user_name=request.matchdict['user_name']) }}">{{ request.matchdict['user_name'] }}</a> / <a href="{{ request.route_url('view_user_taglist', user_name=request.matchdict['user_name'], tag_name=request.matchdict['tag_name']) }}">{{ request.matchdict['tag_name'] }}</a></p>
 
-<ul>
-{% for tag in tags %}
-<li>
-    <span><a href="{{ request.route_url('view_paper', arxiv_id=tag.paper.arxiv_id) }}">{{ tag.paper.title }}</a></span>
-    <span><a href="{{ request.route_url('delete_tag', arxiv_id=tag.paper.arxiv_id, tag_name=tag.name) }}">x</a></span>
-    </li>
+{% for paper in papers %}
+{% include('./custom_cells/paper_cell.jinja2') %}
 {% endfor %}
-<ul>
 
 {% endblock content %}

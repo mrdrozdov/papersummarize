@@ -1,25 +1,18 @@
-<div id="paper-cell">
-    <div class="paper-cell-left">
+<div class="paper-cell row">
+    <div class="paper-cell-left col-xs-1">
         <div class="paper-cell-macroscore">{{ paper.macroscore }}</div>
-        <div class="paper-cell-summaryscore">{{ paper.summaryscore }}</div>
-        <div class="paper-cell-tipscore">{{ paper.tipscore }}</div>
     </div>
-    <div class="paper-cell-right">
+    <div class="paper-cell-middle col-xs-10">
         <div class="paper-cell-title">
-            <p>
-            {{ paper.title }} ({{ paper.formatted_date }})
-            </p>
+            <a href="{{ request.route_url('view_paper', arxiv_id=paper.arxiv_id) }}">{{ paper.title }}</a> ({{ paper.formatted_date }})
         </div>
         <div class="paper-cell-authors">
-            <p>
                 {% for author in paper.authors %}
                 <span>{{ author.name }}</span>{% if loop.last %}.{% else %}, {% endif %}
                 {% endfor %}
-            </p>
         </div>
         <div class="paper-cell-userdata">
-            <div class="paper-cell-userscore">
-                <p>
+            <span class="paper-cell-userscore">
                     {% for index in range(1, 11) %}
                         {% if paper.userscore %}
                             {% if index == paper.userscore %}
@@ -31,16 +24,30 @@
                             <span><a href="{{ request.route_url('add_paper_rating', arxiv_id=paper.arxiv_id, rating=index) }}">{{ index }}</a></span>
                         {% endif %}
                     {% endfor %}
-                </p>  
-            </div>
-            <div class="paper-cell-tags">
-                {% for tag in paper.tags %}
-                    <span>
-                    <span><a href="{{request.route_url('view_user_taglist', user_name=request.user.name, tag_name=tag.name)}}">{{ tag.name }}</a></span> 
-                    <span><a href="{{request.route_url('delete_tag', arxiv_id=paper.arxiv_id, tag_name=tag.name)}}">(x)</a></span>
+            </span>
+            {% for tag in paper.tags %}
+                {% if loop.first %}
+                    <span style="margin-left: 5px; margin-right: 5px;">|</span>
+                    <span class="paper-cell-tags">
+                {% endif %}
+                        <span>
+                        <a href="{{request.route_url('view_user_taglist', user_name=request.user.name, tag_name=tag.name)}}">{{ tag.name }}</a>
+                        <a href="{{request.route_url('delete_tag', arxiv_id=paper.arxiv_id, tag_name=tag.name)}}" class="tag-close close" aria-label="Close"><span>&times;</span></a>
+                        </span> 
+                {% if loop.last %}
                     </span>
-                {% endfor %}
-            </div>
+                {% endif %}
+            {% endfor %}
+            </span>
+        </div>
+    </div>
+    <div class="paper-cell-right col-xs-1">
+        <div class="paper-cell-similar">
+            <a href="{{ request.route_url('view_similar_papers', arxiv_id=paper.arxiv_id) }}">Similar</a>
+        </div>
+        <div>
+            <span class="paper-cell-summaryscore">{{ paper.summaryscore }}</span>
+            <span class="paper-cell-tipscore">{{ paper.tipscore }}</span>
         </div>
     </div>
 </div>

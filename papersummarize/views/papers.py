@@ -95,37 +95,13 @@ def view_paper(request):
 @view_config(route_name='view_similar_papers', renderer='../templates/view_similar_papers.jinja2')
 def view_similar_papers(request):
     paper = request.context.paper
-
-    # Tags
-    if request.user is not None:
-        tags = request.dbsession.query(Tag).filter_by(creator=request.user, paper=paper).all()
-    else:
-        tags = None
-
-    # Paper Ratings
-    paper_ratings = paper.created_paper_ratings
-    num_ratings = len(paper_ratings)
-    total_rating = sum(map(lambda x: x.rating, paper_ratings))
-
-    # Your Paper Rating
-    if request.user is not None:
-        your_paper_rating = request.dbsession.query(PaperRating).filter_by(creator=request.user, paper=paper).first()
-        has_rated_paper = your_paper_rating is not None
-    else:
-        your_paper_rating = None
-        has_rated_paper = False
-
-    # Similar Papers
     similar_papers = [paper_utils.stub_paper('some_id'), paper_utils.stub_paper('other_id')]
 
-    return dict(paper=paper,
-        paper_object=paper_utils.paper_object(paper),
-        similar_papers=map(paper_utils.paper_object, similar_papers),
-        tags=tags,
-        total_rating=total_rating,
-        num_ratings=num_ratings,
-        your_paper_rating=your_paper_rating,
-        has_rated_paper=has_rated_paper)
+    view_args = dict()
+    view_args['paper'] = paper_cell(request, paper)
+    view_args['papers'] = map(lambda paper: paper_cell(request, paper), papers)
+
+    return view_args
 
 @view_config(route_name='add_summary', renderer='../templates/add_summary.jinja2',
              permission='create')

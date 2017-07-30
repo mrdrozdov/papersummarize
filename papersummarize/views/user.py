@@ -7,7 +7,7 @@ from pyramid.httpexceptions import HTTPFound, HTTPNotFound
 from pyramid.view import view_config
 
 from .helpers.paper import paper_cell
-from ..models import Summary, Tag, Tip, PaperRating
+from ..models import Summary, Tag, Tip, Paper, PaperRating
 from ..shared import paper_utils
 from ..shared.enums import ENUM_Summary_review_status
 from ..shared.url_parsing import parse_arxiv_url
@@ -72,7 +72,13 @@ def view_user_taglist(request):
     user = request.context.user
     tag_name = request.matchdict['tag_name']
     tags = request.dbsession.query(Tag).filter_by(creator=user, name=tag_name).all()
-    return dict(user=user, tags=tags)
+    papers = map(lambda tag: tag.paper, tags)
+
+    view_args = dict()
+    view_args['user'] = user
+    view_args['papers'] = map(lambda paper: paper_cell(request, paper), papers)
+
+    return view_args
 
 @view_config(route_name='view_user_paper_ratings', renderer='../templates/user_paper_ratings.jinja2')
 def view_user_paper_ratings(request):
