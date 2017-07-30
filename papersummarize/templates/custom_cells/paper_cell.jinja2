@@ -25,19 +25,26 @@
                         {% endif %}
                     {% endfor %}
             </span>
+                <span style="margin-left: 5px; margin-right: 5px;">|</span>
+                <span class="paper-cell-tags">
             {% for tag in paper.tags %}
-                {% if loop.first %}
-                    <span style="margin-left: 5px; margin-right: 5px;">|</span>
-                    <span class="paper-cell-tags">
-                {% endif %}
-                        <span>
-                        <a href="{{request.route_url('view_user_taglist', user_name=request.user.name, tag_name=tag.name)}}">{{ tag.name }}</a>
-                        <a href="{{request.route_url('delete_tag', arxiv_id=paper.arxiv_id, tag_name=tag.name)}}" class="tag-close close" aria-label="Close"><span>&times;</span></a>
-                        </span> 
-                {% if loop.last %}
+                    <span>
+                    <a href="{{request.route_url('view_user_taglist', user_name=request.user.name, tag_name=tag.name)}}">{{ tag.name }}</a>
+                    <a href="{{request.route_url('delete_tag', arxiv_id=paper.arxiv_id, tag_name=tag.name)}}" class="tag-close close" aria-label="Close" aria-hidden="true"><span>&times;</span></a>
                     </span>
+                {% if loop.last %}
+                    <span style="margin-left: 5px; margin-right: 5px;">-</span>
                 {% endif %}
             {% endfor %}
+                    <span>
+                    <form class="form-inline form-tag" action="{{ request.route_url('add_tag', arxiv_id=paper.arxiv_id) }}" method="post">
+                    <div class="form-group form-group-tag">
+                        <textarea name="next" hidden>{{ request.url }}</textarea>
+                        <input class="form-control input-tag" placeholder="Enter tag." name="body">
+                    </div>
+                    </form>
+                    </span>
+                </span>
             </span>
         </div>
     </div>

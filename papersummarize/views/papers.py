@@ -32,11 +32,12 @@ def view_paper(request):
     """
 
     paper = request.context.paper
+    summary = request.dbsession.query(Summary).filter_by(creator=request.user, paper=paper).first()
 
     view_args = dict()
     view_args['paper'] = paper_cell(request, paper)
+    view_args['summary'] = summary
 
-    # summary = request.dbsession.query(Summary).filter_by(creator=request.user, paper=paper).first()
     # has_wrote = summary is not None
     # has_been_reviewed = has_wrote and summary.review_status == ENUM_Summary_review_status['reviewed']
     # num_summaries = request.dbsession.query(Summary).filter_by(paper=paper).count()
@@ -151,21 +152,24 @@ def delete_tip(request):
     next_url = request.route_url('view_paper', arxiv_id=arxiv_id)
     return HTTPFound(location=next_url)
 
-@view_config(route_name='add_tag', renderer='../templates/add_tag.jinja2',
-             permission='create')
+@view_config(route_name='add_tag', permission='create')
 def add_tag(request):
+    next_url = request.params.get('next', request.referrer)
+    if not next_url:
+        next_url = request.route_url('home')
+
     paper = request.context.paper
     user = request.user
-    if 'form.submitted' in request.params:
-        tag_name = request.params['body']
-        tag = Tag(creator=request.user, paper=paper)
-        tag.set_name(tag_name)
-        request.dbsession.add(tag)
-        next_url = request.route_url('view_paper', arxiv_id=paper.arxiv_id)
+
+    if not request.params.get('body', None):
         return HTTPFound(location=next_url)
-    tags = request.dbsession.query(Tag).filter_by(creator=user, paper=paper).all()
-    save_url = request.route_url('add_tag', arxiv_id=paper.arxiv_id)
-    return dict(paper=paper, save_url=save_url, tags=tags)
+
+    tag_name = request.params['body']
+    tag = Tag(creator=request.user, paper=paper)
+    tag.set_name(tag_name)
+    request.dbsession.add(tag)
+
+    return HTTPFound(location=next_url)
 
 @view_config(route_name='delete_tag', permission='edit')
 def delete_tag(request):

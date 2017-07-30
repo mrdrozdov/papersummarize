@@ -42,5 +42,5 @@ def logout(request):
 
 @forbidden_view_config()
 def forbidden_view(request):
-    next_url = request.route_url('login', _query={'next': request.url})
+    next_url = request.route_url('login', _query={'next': request.params.get('next', request.url)})
     return HTTPFound(location=next_url)

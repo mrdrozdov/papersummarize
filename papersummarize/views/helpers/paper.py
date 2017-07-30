@@ -31,6 +31,7 @@ def userscore(request, paper):
 
 def paper_for_paper_cell(paper):
     result = dict()
+    result['_paper'] = paper
     result['arxiv_id'] = paper.arxiv_id
     result['title'] = paper.title
     result['formatted_date'] = paper.published.strftime("%B %d, %Y")
@@ -42,7 +43,7 @@ def tags_for_paper_cell(request, paper):
     if request.user:
         return request.dbsession.query(Tag).filter_by(creator=request.user, paper=paper).all()
     else:
-        return None
+        return []
 
 
 def paper_cell(request, paper):
