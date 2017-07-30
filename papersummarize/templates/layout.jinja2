@@ -52,7 +52,7 @@
             </span>
             {% else %}
             <span class="pull-right">
-            <a href="{{ request.route_url('view_user', user_name=request.user.name) }}">{{request.user.name}}</a> | <a href="{{request.route_url('logout')}}">logout</a>
+            <a href="{{ request.route_url('view_user', user_name=request.user.name) }}">{{request.user.name}}</a> | <a href="{{request.route_url('logout', _query={'next': request.url})}}">logout</a>
             </span>
             {% endif %}
             </div>

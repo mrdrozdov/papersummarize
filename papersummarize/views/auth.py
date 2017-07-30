@@ -37,7 +37,7 @@ def login(request):
 @view_config(route_name='logout')
 def logout(request):
     headers = forget(request)
-    next_url = request.route_url('home')
+    next_url = request.params.get('next', request.route_url('home'))
     return HTTPFound(location=next_url, headers=headers)
 
 @forbidden_view_config()
