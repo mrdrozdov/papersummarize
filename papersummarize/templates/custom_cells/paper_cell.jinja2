@@ -21,7 +21,7 @@
                                 <span><a href="{{ request.route_url('edit_paper_rating', arxiv_id=paper.arxiv_id, rating=index) }}">{{ index }}</a></span>
                             {% endif %}
                         {% else %}
-                            <span><a href="{{ request.route_url('add_paper_rating', arxiv_id=paper.arxiv_id, rating=index) }}">{{ index }}</a></span>
+                            <span><a href="{{ request.route_url('add_paper_rating', arxiv_id=paper.arxiv_id, rating=index, _query={'next': request.url}) }}">{{ index }}</a></span>
                         {% endif %}
                     {% endfor %}
             </span>
