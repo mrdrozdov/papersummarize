@@ -4,7 +4,7 @@
 
 {% block content %}
 <p>
-Submit summary for <strong><a href="{{request.route_url('view_paper', arxiv_id=paper.arxiv_id)}}">{{paper.arxiv_id}}</a></strong>
+Submit summary for <strong><a href="{{request.route_url('view_paper', arxiv_id=paper.arxiv_id)}}">{{paper.title}}</a></strong>
 </p>
 <form action="{{ save_url }}" method="post">
 <div class="form-group">
