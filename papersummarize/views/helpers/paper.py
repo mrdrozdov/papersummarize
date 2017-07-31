@@ -1,21 +1,23 @@
 import json
 
-from ...models import PaperRating, Tag
+from ...models import PaperRating, Tag, Summary, Tip
 
 
 def macroscore(request, paper):
-    # TODO
-    return 0
+    ratings = request.dbsession.query(PaperRating).filter_by(paper=paper).all()
+    if len(ratings) > 0:
+        score = sum(map(lambda x: x.rating, ratings)) / float(len(ratings))
+    else:
+        score = 0
+    return score
 
 
 def summaryscore(request, paper):
-    # TODO
-    return 0
+    return request.dbsession.query(Summary).filter_by(paper=paper).count()
 
 
 def tipscore(request, paper):
-    # TODO
-    return 0
+    return request.dbsession.query(Tip).filter_by(paper=paper).count()
 
 
 def userscore(request, paper):
