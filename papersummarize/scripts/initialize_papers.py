@@ -12,6 +12,7 @@ from pyramid.paster import (
 
 from pyramid.scripts.common import parse_vars
 
+from .defaults import defaults
 from ..shared import paper_utils
 from ..models.meta import Base
 from ..models import (
@@ -84,10 +85,11 @@ def main(argv=sys.argv):
     if len(argv) < 2:
         usage(argv)
     config_uri = argv[1]
-    options = parse_vars(argv[2:])
+    options = dict()
+    options.update(defaults)
+    options.update(parse_vars(argv[2:]))
     setup_logging(config_uri)
-    settings = get_appsettings(config_uri)
-    settings.update(options)
+    settings = get_appsettings(config_uri, options=options)
 
     engine = get_engine(settings)
     Base.metadata.create_all(engine)

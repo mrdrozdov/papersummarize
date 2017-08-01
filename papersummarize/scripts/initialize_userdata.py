@@ -10,6 +10,7 @@ from pyramid.paster import (
 
 from pyramid.scripts.common import parse_vars
 
+from .defaults import defaults
 from ..shared import paper_utils
 from ..models.meta import Base
 from ..models import (
@@ -33,7 +34,9 @@ def main(argv=sys.argv):
     if len(argv) < 2:
         usage(argv)
     config_uri = argv[1]
-    options = parse_vars(argv[2:])
+    options = dict()
+    options.update(defaults)
+    options.update(parse_vars(argv[2:]))
     setup_logging(config_uri)
     settings = get_appsettings(config_uri, options=options)
 
@@ -45,100 +48,18 @@ def main(argv=sys.argv):
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
 
-        some_paper = dbsession.query(Paper).filter_by(arxiv_id=paper_utils.some_paper_id).first()
-        other_paper = dbsession.query(Paper).filter_by(arxiv_id=paper_utils.other_paper_id).first()
+	with open(settings['default.users']) as f:
+            users = []
+            for i, line in enumerate(f):
+                line = line.strip().split(',')
+                if i == 0:
+                    header = line
+                    continue
+                u = {k: v for k, v in zip(header, line)}
+                users.append(u)
 
-        editor = User(name='editor', role='editor', is_leader=ENUM_User_is_leader['True'])
-        editor.set_password('editor')
-        dbsession.add(editor)
-
-        basic = User(name='basic', role='basic')
-        basic.set_password('basic')
-        dbsession.add(basic)
-
-        basic_users = []
-        for i in range(10):
-            basic_user = User(name='basic' + str(i), role='basic')
-            basic_user.set_password('basic')
-            dbsession.add(basic_user)
-            basic_users.append(basic_user)
-
-        summary_unaccepted = Summary(
-            creator=basic_users[0],
-            paper=other_paper,
-            data='this summary is under review.',
-            visibility=ENUM_Summary_visibility['members'],
-            review_status=ENUM_Summary_review_status['under_review'],
-        )
-        dbsession.add(summary_unaccepted)
-
-        summary_accepted = Summary(
-            creator=basic_users[1],
-            paper=other_paper,
-            data='this summary is reviewed.',
-            visibility=ENUM_Summary_visibility['members'],
-            review_status=ENUM_Summary_review_status['reviewed'],
-        )
-        dbsession.add(summary_accepted)
-
-        summary_public = Summary(
-            creator=editor,
-            paper=some_paper,
-            data='this summary is not reviewed.',
-            review_status=ENUM_Summary_review_status['under_review'],
-        )
-        dbsession.add(summary_public)
-
-        summary_public = Summary(
-            creator=editor,
-            paper=other_paper,
-            data='this summary is reviewed and public.',
-            visibility=ENUM_Summary_visibility['public'],
-            review_status=ENUM_Summary_review_status['reviewed'],
-        )
-        dbsession.add(summary_public)
-
-        summary_public_unaccepted = Summary(
-            creator=basic_users[2],
-            paper=other_paper,
-            data='this summary is under review and public (probably will not be possible create naturally).',
-            visibility=ENUM_Summary_visibility['public'],
-            review_status=ENUM_Summary_review_status['under_review'],
-        )
-        dbsession.add(summary_public_unaccepted)
-
-        tip = Tip(
-            creator=editor,
-            paper=other_paper,
-            category=ENUM_Tip_category['useful_text'],
-            data='this is a tip https://github.com/mrdrozdov/spinn',
-        )
-        dbsession.add(tip)
-
-        tag_one = Tag(
-            creator=editor,
-            paper=other_paper,
-        )
-        tag_one.set_name('tag_one')
-        dbsession.add(tag_one)
-
-        tag_two = Tag(
-            creator=editor,
-            paper=other_paper,
-        )
-        tag_two.set_name('tag_two')
-        dbsession.add(tag_two)
-
-        rating_one = PaperRating(
-            creator=editor,
-            paper=other_paper,
-        )
-        rating_one.set_rating(5)
-        dbsession.add(rating_one)
-
-        rating_two = PaperRating(
-            creator=editor,
-            paper=some_paper,
-        )
-        rating_two.set_rating(10)
-        dbsession.add(rating_two)
+        for u in users:
+            new_user = User(name=u['name'], role='editor')
+            new_user.set_password(u['password'])
+            dbsession.add(new_user)
+            
