@@ -105,6 +105,8 @@ def main(argv=sys.argv):
     papers += [some_paper, other_paper]
 
     skipped = 0
+    added = 0
+    existed = 0
 
     # Create real papers.
     with transaction.manager:
@@ -115,8 +117,11 @@ def main(argv=sys.argv):
                 paper = read_arxiv_paper(arxiv_paper)
                 if dbsession.query(Paper).filter_by(arxiv_id=paper.arxiv_id).count() == 0:
                     dbsession.add(paper)
+                    added += 1
+                else:
+                    existed += 1
             except:
                 skipped += 1
-    print("Skipped: {}".format(skipped))
+    print("Skipped: {} Existed: {} Added: {}".format(skipped, existed, added))
 
 
