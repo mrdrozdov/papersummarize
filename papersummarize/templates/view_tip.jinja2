@@ -17,8 +17,3 @@ Submit tip for <strong><a href="{{request.route_url('view_paper', arxiv_id=paper
 {% endif %}
 </form>
 {% endblock content %}
-
-{% block js %}
-<script src="{{request.static_url('papersummarize:static/js/shared/linkify.min.js')}}"></script>
-<script src="{{request.static_url('papersummarize:static/js/shared/linkify-jquery.min.js')}}"></script>
-{% endblock %}
