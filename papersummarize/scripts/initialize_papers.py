@@ -2,7 +2,7 @@ import os
 import sys
 import json
 from datetime import datetime
-import pickle
+import cPickle as pickle
 import transaction
 
 from pyramid.paster import (
@@ -86,7 +86,8 @@ def main(argv=sys.argv):
     config_uri = argv[1]
     options = parse_vars(argv[2:])
     setup_logging(config_uri)
-    settings = get_appsettings(config_uri, options=options)
+    settings = get_appsettings(config_uri)
+    settings.update(options)
 
     engine = get_engine(settings)
     Base.metadata.create_all(engine)
@@ -96,22 +97,24 @@ def main(argv=sys.argv):
     filename = settings['initdb.papers']
     raw_papers = pickle.load(open(filename, 'rb'))
     papers = map(ArxivPaper, raw_papers.values())
+    
+    some_paper = paper_utils.stub_paper(arxiv_id=paper_utils.some_paper_id)
+    other_paper = paper_utils.stub_paper(arxiv_id=paper_utils.other_paper_id)
+    papers += [some_paper, other_paper]
 
-    # Create dummy papers.
-    with transaction.manager:
-        dbsession = get_tm_session(session_factory, transaction.manager)
-
-        some_paper = paper_utils.stub_paper(arxiv_id=paper_utils.some_paper_id)
-        dbsession.add(some_paper)
-
-        other_paper = paper_utils.stub_paper(arxiv_id=paper_utils.other_paper_id)
-        dbsession.add(other_paper)
+    skipped = 0
 
     # Create real papers.
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
 
         for arxiv_paper in papers:
-            paper = read_arxiv_paper(arxiv_paper)
-            if not (dbsession.query(Paper).filter(arxiv_id=paper.arxiv_id) > 0):
-                dbsession.add(paper)
+            try:
+                paper = read_arxiv_paper(arxiv_paper)
+                if dbsession.query(Paper).filter_by(arxiv_id=paper.arxiv_id).count() == 0:
+                    dbsession.add(paper)
+            except:
+                skipped += 1
+    print("Skipped: {}".format(skipped))
+
+

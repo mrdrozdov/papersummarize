@@ -27,6 +27,8 @@ def summaries_for_paper(request, paper):
     """
 
     if request.user is not None:
+        summaries = request.dbsession.query(Summary).filter_by(paper=paper).all()
+        """
         user_summary = request.dbsession.query(Summary).filter_by(creator=request.user, paper=paper).first()
         if user_summary is not None:
             summaries = request.dbsession.query(Summary).filter_by(paper=paper, review_status=ENUM_Summary_review_status['reviewed']).all()
@@ -41,6 +43,8 @@ def summaries_for_paper(request, paper):
                 summaries.insert(0, user_summary)
         else:
             summaries = request.dbsession.query(Summary).filter_by(paper=paper, review_status=ENUM_Summary_visibility['public']).all()
+        """
     else:
         summaries = request.dbsession.query(Summary).filter_by(paper=paper, visibility=ENUM_Summary_visibility['public']).all()
+
     return summaries

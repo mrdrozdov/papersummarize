@@ -57,6 +57,7 @@ setup(
             'main = papersummarize:main',
         ],
         'console_scripts': [
+            'add_user = papersummarize.scripts.add_user:main',
             'initialize_db = papersummarize.scripts.initialize_db:main',
             'initialize_papers = papersummarize.scripts.initialize_papers:main',
             'initialize_userdata = papersummarize.scripts.initialize_userdata:main',
