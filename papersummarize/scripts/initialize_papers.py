@@ -97,13 +97,6 @@ def main(argv=sys.argv):
     raw_papers = pickle.load(open(filename, 'rb'))
     papers = map(ArxivPaper, raw_papers.values())
 
-    # Remove all papers.
-    with transaction.manager:
-        dbsession = get_tm_session(session_factory, transaction.manager)
-
-        for paper in dbsession.query(Paper).all():
-            dbsession.delete(paper)
-
     # Create dummy papers.
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
@@ -120,4 +113,5 @@ def main(argv=sys.argv):
 
         for arxiv_paper in papers:
             paper = read_arxiv_paper(arxiv_paper)
-            dbsession.add(paper)
+            if not (dbsession.query(Paper).filter(arxiv_id=paper.arxiv_id) > 0):
+                dbsession.add(paper)
