@@ -13,10 +13,25 @@ from ..shared.url_parsing import parse_arxiv_url
 
 @view_config(route_name='home', renderer='../templates/home.jinja2')
 def home(request):
-    papers = request.dbsession.query(Paper).limit(10).all()
+    limit = min(int(request.params.get('limit', 30)), 100)
+    page = int(request.params.get('page', 0))
+
+    query = request.dbsession.query(Paper)
+    query = query.order_by(Paper.published.desc())
+    query = query.limit(limit).offset(page*limit)
+
+    papers = query.all()
+
+    query_dict = dict(
+        page_prev=max(page-1, 0),
+        limit_prev=limit,
+        page_next=page+1,
+        limit_next=limit,
+        )
 
     view_args = dict()
     view_args['papers'] = map(lambda paper: paper_cell(request, paper), papers)
+    view_args['query'] = query_dict
 
     if 'form.submitted.view' in request.params or 'form.submitted.summarize' in request.params:
         body = request.params['body']
