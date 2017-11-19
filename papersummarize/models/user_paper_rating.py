@@ -12,9 +12,9 @@ from sqlalchemy.orm import relationship
 from .meta import Base
 
 
-class PaperRating(Base):
-    """ The SQLAlchemy declarative model class for a PaperRating object. """
-    __tablename__ = 'paper_ratings'
+class UserPaperRating(Base):
+    """ The SQLAlchemy declarative model class for a UserPaperRating object. """
+    __tablename__ = 'user_paper_ratings'
     id = Column(Integer, primary_key=True)
     paper_id = Column(ForeignKey('papers.id'), nullable=False)
     creator_id = Column(ForeignKey('users.id'), nullable=False)
@@ -23,8 +23,8 @@ class PaperRating(Base):
     rating = Column(Integer)
 
     unique_name = Column(Text, unique=True)
-    creator = relationship('User', backref='created_paper_ratings')
-    paper = relationship('Paper', backref='created_paper_ratings')
+    creator = relationship('User', backref='created_user_paper_ratings')
+    paper = relationship('Paper', backref='created_user_paper_ratings')
 
     def set_rating(self, rating):
         rating = int(rating)

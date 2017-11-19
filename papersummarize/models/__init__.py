@@ -7,7 +7,7 @@ import zope.sqlalchemy
 # Base.metadata prior to any initialization routines
 from .page import Page  # flake8: noqa
 from .paper import Paper  # flake8: noqa
-from .paper_rating import PaperRating  # flake8: noqa
+from .user_paper_rating import UserPaperRating  # flake8: noqa
 from .tag import Tag  # flake8: noqa
 from .tip import Tip  # flake8: noqa
 from .user import User  # flake8: noqa

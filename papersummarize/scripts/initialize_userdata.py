@@ -18,7 +18,7 @@ from ..models import (
     get_session_factory,
     get_tm_session,
     )
-from ..models import User, Paper, PaperRating, Tag, Tip
+from ..models import User, Paper, UserPaperRating, Tag, Tip
 from ..shared.enums import ENUM_Tip_category
 
 

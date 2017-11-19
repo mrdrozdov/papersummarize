@@ -9,7 +9,7 @@ from pyramid.view import view_config
 from .helpers.paper import paper_cell
 from .helpers.tip import tip_cell
 from ..shared import paper_utils
-from ..models import Paper, PaperRating, Tag, Tip
+from ..models import Paper, UserPaperRating, Tag, Tip
 from ..shared.enums import ENUM_Tip_category
 
 @view_config(route_name='view_paper', renderer='../templates/paper.jinja2',
@@ -85,33 +85,33 @@ def delete_tag(request):
     request.dbsession.delete(tag)
     return HTTPFound(location=next_url)
 
-@view_config(route_name='add_paper_rating', permission='create')
-def add_paper_rating(request):
+@view_config(route_name='add_user_paper_rating', permission='create')
+def add_user_paper_rating(request):
     rating = request.matchdict['rating']
     paper = request.context.paper
-    paper_rating = PaperRating(creator=request.user, paper=paper)
-    paper_rating.set_rating(rating)
-    request.dbsession.add(paper_rating)
+    user_paper_rating = UserPaperRating(creator=request.user, paper=paper)
+    user_paper_rating.set_rating(rating)
+    request.dbsession.add(user_paper_rating)
     next_url = request.params.get('next', request.referrer)
     if not next_url:
         next_url = request.route_url('view_paper', arxiv_id=paper.arxiv_id)
     return HTTPFound(location=next_url)
 
-@view_config(route_name='edit_paper_rating', permission='edit')
-def edit_paper_rating(request):
+@view_config(route_name='edit_user_paper_rating', permission='edit')
+def edit_user_paper_rating(request):
     next_url = request.params.get('next', request.referrer)
     if not next_url:
         next_url = request.route_url('home')
-    paper_rating = request.context.paper_rating
+    user_paper_rating = request.context.user_paper_rating
     rating = request.matchdict['rating']
-    paper_rating.rating = rating
+    user_paper_rating.rating = rating
     return HTTPFound(location=next_url)
 
-@view_config(route_name='delete_paper_rating', permission='edit')
-def delete_paper_rating(request):
+@view_config(route_name='delete_user_paper_rating', permission='edit')
+def delete_user_paper_rating(request):
     next_url = request.params.get('next', request.referrer)
     if not next_url:
         next_url = request.route_url('home')
-    paper_rating = request.context.paper_rating
-    request.dbsession.delete(paper_rating)
+    user_paper_rating = request.context.user_paper_rating
+    request.dbsession.delete(user_paper_rating)
     return HTTPFound(location=next_url)
