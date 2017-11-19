@@ -1,0 +1,25 @@
+{% extends 'layout.jinja2' %}
+
+{% block subtitle %} Welcome to Paper Summarize. {% endblock subtitle %}
+
+{% block content %}
+
+<div class="row" style="margin-bottom: 10px;">
+    <div class="col-xs-12">
+        {% for tip in tips %}
+        {% include('./custom_cells/tip_cell.jinja2') %}
+        {% endfor %}
+    </div>
+</div>
+
+<div class="footer row" style="margin-bottom: 50px; background-color: white; padding: 10px;">
+<div class="col-xs-4 text-left">
+<span style="margin-left: 20px;"><a href="{{ request.route_url('tips', _query={'page': query.page_prev, 'limit': query.limit_prev}) }}">prev</a><span>
+</div>
+<div class="col-xs-4 text-center"></div>
+<div class="col-xs-4 text-right">
+<span style="margin-right: 20px;"><a href="{{ request.route_url('tips', _query={'page': query.page_next, 'limit': query.limit_next}) }}">next</a></span>
+</div>
+</div>
+
+{% endblock content %}

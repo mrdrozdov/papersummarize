@@ -49,7 +49,7 @@ def new(request):
             return HTTPFound(location=next_url)
     return view_args
 
-@view_config(route_name='top', renderer='../templates/home.jinja2')
+@view_config(route_name='top', renderer='../templates/top.jinja2')
 def top(request):
     limit = min(int(request.params.get('limit', 30)), 100)
     page = int(request.params.get('page', 0))
@@ -104,7 +104,7 @@ def tips(request):
         )
 
     view_args = dict()
-    view_args['tips'] = map(lambda tip: tip_cell(request, tip), tips)
+    view_args['tips'] = map(lambda tip: tip_cell(tip, show_title=True), tips)
     view_args['query'] = query_dict
 
     return view_args
