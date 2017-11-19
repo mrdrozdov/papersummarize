@@ -37,7 +37,7 @@ def view_user_activity(request):
             item['tag'] = a
         elif isinstance(a, UserPaperRating):
             item['type'] = 'user_paper_rating'
-            item['rating'] = a.rating
+            item['user_paper_rating'] = a
         else:
             item['type'] = 'unknown'
 
