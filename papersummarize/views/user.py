@@ -26,26 +26,20 @@ def view_user_activity(request):
     activities = reversed(sorted(activities, key=lambda x: x.created_at))
 
     def create_item_from_activity(a):
-        if isinstance(a, Tip):
-            created_at = a.created_at
-            text = "Created tip."
-            url = request.route_url('view_tip', arxiv_id=a.paper.arxiv_id, tip_id=a.id)
-        elif isinstance(a, Tag):
-            created_at = a.created_at
-            text = "Created tag {} for paper {}.".format(a.name, a.paper.title)
-            url = request.route_url('view_paper', arxiv_id=a.paper.arxiv_id)
-        elif isinstance(a, UserPaperRating):
-            created_at = a.created_at
-            text = "Gave a {} rating to {}.".format(a.rating, a.paper.title)
-            url = request.route_url('view_paper', arxiv_id=a.paper.arxiv_id)
-        else:
-            created_at = a.created_at
-            text = "Unknown activity."
-            url = request.route_url('view_paper', arxiv_id=a.paper.arxiv_id)
+        item = dict()
+        item['created_at'] = a.created_at
+        item['paper'] = a.paper
 
-        item = dict(created_at=created_at,
-            text=text,
-            url=url)
+        if isinstance(a, Tip):
+            item['type'] = 'tip'
+        elif isinstance(a, Tag):
+            item['type'] = 'tag'
+            item['tag'] = a
+        elif isinstance(a, UserPaperRating):
+            item['type'] = 'user_paper_rating'
+            item['rating'] = a.rating
+        else:
+            item['type'] = 'unknown'
 
         return item
 

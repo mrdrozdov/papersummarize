@@ -8,7 +8,17 @@
 {% if activities is not none %}
 <ul>
 {% for item in activities %}
-<li>[{{item.created_at}}] {{item.text}} <a href="{{ item.url }}">#</a></li>
+
+    {% if item.type == 'tip' %}
+        <li>[{{item.created_at}}] Created tip for <a href="{{ request.route_url('view_paper', arxiv_id=item.paper.arxiv_id) }}">{{ item.paper.title }}</a>.</li>
+    {% elif item.type == 'tag' %}
+        <li>[{{item.created_at}}] Added tag <a href="{{request.route_url('view_user_taglist', user_name=item.tag.creator.name, tag_name=item.tag.name)}}">{{ item.tag.name }}</a> for <a href="{{ request.route_url('view_paper', arxiv_id=item.paper.arxiv_id) }}">{{ item.paper.title }}</a>.</li>
+    {% elif item.type == 'user_paper_rating' %}
+        <li>[{{item.created_at}}] Gave a {{ item.rating }} rating to <a href="{{ request.route_url('view_paper', arxiv_id=item.paper.arxiv_id) }}">{{ item.paper.title }}</a>.</li>
+    {% else %}
+        <li>[{{item.created_at}}] Unknown activity for <a href="{{ request.route_url('view_paper', arxiv_id=item.paper.arxiv_id) }}">{{ item.paper.title }}</a>.</li>
+    {% endif %}
+
 {% endfor %}
 <ul>
 {% endif %}

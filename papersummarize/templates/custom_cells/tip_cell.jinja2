@@ -13,7 +13,9 @@
             {% endif %}
             <span style="margin-left: 5px; margin-right: 5px;">-</span>
             <span><a href="{{ request.route_url('view_tip', arxiv_id=tip._tip.paper.arxiv_id, tip_id=tip._tip.id) }}">{{ tip.formatted_date }}</a></span>
-            <span><a href="{{request.route_url('delete_tip', arxiv_id=paper.arxiv_id, tip_id=tip._tip.id) }}" class="tag-close close" aria-label="Close" aria-hidden="true"><span>&times;</span></a></span>
+            {% if request.user == tip._tip.creator %}
+                <span><a href="{{request.route_url('delete_tip', arxiv_id=paper.arxiv_id, tip_id=tip._tip.id) }}" class="tag-close close" aria-label="Close" aria-hidden="true"><span>&times;</span></a></span>
+            {% endif %}
         </div>
     </div>
 </div>
