@@ -8,26 +8,6 @@
 
 <div class="row" style="text-align: center; margin-bottom: 10px;">
     <div class="col-xs-12">
-        <span>Summaries</span>
-        <span>-</span>
-        {% if summary %}
-        <span><a href="{{ request.route_url('view_summary', arxiv_id=paper.arxiv_id, user_name=summary.creator.name) }}">view</a></span>
-        {% else %}
-        <span><a href="{{ request.route_url('add_summary', arxiv_id=paper.arxiv_id, _query={'next': request.url}) }}">add</a></span>
-        {% endif %}
-    </div>
-</div>
-
-<div class="row" style="margin-bottom: 10px;">
-    <div class="col-xs-12">
-        {% for summary in summaries %}
-        {% include('./custom_cells/summary_cell.jinja2') %}
-        {% endfor %}
-    </div>
-</div>
-
-<div class="row" style="text-align: center; margin-bottom: 10px;">
-    <div class="col-xs-12">
         <span>Tips</span>
         <span>-</span>
         <span><a href="{{ request.route_url('add_tip', arxiv_id=paper.arxiv_id, _query={'next': request.url}) }}">add</a></span>

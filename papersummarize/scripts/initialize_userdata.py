@@ -18,9 +18,7 @@ from ..models import (
     get_session_factory,
     get_tm_session,
     )
-from ..models import User, Paper, PaperRating, Summary, Tag, Tip
-from ..shared.enums import ENUM_User_is_leader
-from ..shared.enums import ENUM_Summary_visibility, ENUM_Summary_review_status
+from ..models import User, Paper, PaperRating, Tag, Tip
 from ..shared.enums import ENUM_Tip_category
 
 

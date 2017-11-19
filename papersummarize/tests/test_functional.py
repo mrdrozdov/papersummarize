@@ -24,7 +24,6 @@ class FunctionalTests(unittest.TestCase):
         from papersummarize.models import (
             User,
             Paper,
-            Summary,
             Tip,
             get_tm_session,
         )
@@ -59,11 +58,6 @@ class FunctionalTests(unittest.TestCase):
             other_paper = Paper(arxiv_id=other_paper_id)
             dbsession.add(other_paper)
 
-            summary = Summary(creator=editor,
-                paper=other_paper,
-                data='this summary is reviewed and public.')
-            dbsession.add(summary)
-
     @classmethod
     def tearDownClass(cls):
         from papersummarize.models.meta import Base
@@ -97,10 +91,6 @@ class FunctionalTests(unittest.TestCase):
         self.testapp.get('/', status=200)
         res = self.testapp.get('/logout', status=302)
         self.assertTrue(b'Logout' not in res.body)
-
-    def test_anonymous_user_cannot_add_summary(self):
-        res = self.testapp.get('/x/some_id/add_summary', status=302).follow()
-        self.assertTrue(b'Login' in res.body)
 
     def test_anonymous_user_cannot_add_tip(self):
         res = self.testapp.get('/x/some_id/add_tip', status=302).follow()

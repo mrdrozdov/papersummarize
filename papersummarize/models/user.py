@@ -6,7 +6,6 @@ from sqlalchemy import (
 )
 
 from .meta import Base
-from ..shared.enums import ENUM_User_standing, ENUM_User_is_leader
 
 
 class User(Base):
@@ -15,8 +14,6 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False, unique=True)
     role = Column(Text, nullable=False)
-    is_leader = Column(Integer, nullable=False, default=ENUM_User_is_leader['false']) # TODO: Use a boolean type.
-    standing = Column(Integer, nullable=False, default=ENUM_User_standing['neutral_standing'])
 
     password_hash = Column(Text)
 

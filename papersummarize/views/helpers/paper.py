@@ -1,6 +1,6 @@
 import json
 
-from ...models import PaperRating, Tag, Summary, Tip
+from ...models import PaperRating, Tag, Tip
 
 
 def macroscore(request, paper):
@@ -10,10 +10,6 @@ def macroscore(request, paper):
     else:
         score = 0
     return score
-
-
-def summaryscore(request, paper):
-    return request.dbsession.query(Summary).filter_by(paper=paper).count()
 
 
 def tipscore(request, paper):
@@ -63,7 +59,6 @@ def paper_cell(request, paper):
 
     args = paper_for_paper_cell(paper)
     args['macroscore'] = macroscore(request, paper)
-    args['summaryscore'] = summaryscore(request, paper)
     args['tipscore'] = tipscore(request, paper)
     args['userscore'] = userscore(request, paper)
     args['tags'] = tags_for_paper_cell(request, paper)

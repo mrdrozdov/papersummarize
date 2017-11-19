@@ -7,9 +7,8 @@ from pyramid.httpexceptions import HTTPFound, HTTPNotFound
 from pyramid.view import view_config
 
 from .helpers.paper import paper_cell
-from ..models import Summary, Tag, Tip, Paper, PaperRating
+from ..models import Tag, Tip, Paper, PaperRating
 from ..shared import paper_utils
-from ..shared.enums import ENUM_Summary_review_status
 from ..shared.url_parsing import parse_arxiv_url
 
 @view_config(route_name='view_user', renderer='../templates/user_profile.jinja2')
@@ -20,27 +19,14 @@ def view_user(request):
 @view_config(route_name='view_user_activity', renderer='../templates/user_activity.jinja2')
 def view_user_activity(request):
     user = request.context.user
-    summaries = user.created_summaries
-    # TODO: Also show any activity the current user has access to. For instance, if the session's user
-    # has written a reviewed summary for a paper that the page's user has written a summary for, then
-    # the page's user's summary should be visible regardless of its review status.
-    if request.user != user:
-        summaries = [s for s in summaries if s.review_status == ENUM_Summary_review_status['reviewed']]
     tips = user.created_tips
     tags = user.created_tags
     paper_ratings = user.created_paper_ratings
-    activities = summaries + tips + tags + paper_ratings
+    activities = tips + tags + paper_ratings
     activities = reversed(sorted(activities, key=lambda x: x.created_at))
 
     def create_item_from_activity(a):
-        if isinstance(a, Summary):
-            created_at = a.reviewed_at
-            if a.review_status == ENUM_Summary_review_status['reviewed']:
-                text = "Created summary, which has been reviewed."
-            else:
-                text = "Created summary, which has not been reviewed."
-            url = request.route_url('view_summary', arxiv_id=a.paper.arxiv_id, user_name=a.creator.name)
-        elif isinstance(a, Tip):
+        if isinstance(a, Tip):
             created_at = a.created_at
             text = "Created tip."
             url = request.route_url('view_tip', arxiv_id=a.paper.arxiv_id, tip_id=a.id)

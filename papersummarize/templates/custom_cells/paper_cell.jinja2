@@ -48,13 +48,4 @@
             </span>
         </div>
     </div>
-    <div class="paper-cell-right col-xs-1">
-        <div class="paper-cell-similar">
-            <a href="{{ request.route_url('view_similar_papers', arxiv_id=paper.arxiv_id) }}">Similar</a>
-        </div>
-        <div>
-            <span class="paper-cell-summaryscore">{{ paper.summaryscore }}</span>
-            <span class="paper-cell-tipscore">{{ paper.tipscore }}</span>
-        </div>
-    </div>
 </div>

@@ -10,7 +10,6 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship
 
 from .meta import Base
-from ..shared.enums import ENUM_Summary_visibility, ENUM_Summary_review_status
 
 
 class PaperRating(Base):

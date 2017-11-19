@@ -44,7 +44,4 @@ def home(request):
         if 'form.submitted.view' in request.params:
             next_url = request.route_url('view_paper', arxiv_id=arxiv_id)
             return HTTPFound(location=next_url)
-        elif 'form.submitted.summarize' in request.params:
-            next_url = request.route_url('add_summary', arxiv_id=arxiv_id)
-            return HTTPFound(location=next_url)
     return view_args
