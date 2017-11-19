@@ -3,15 +3,6 @@ import json
 from ...models import UserPaperRating, Tag, Tip
 
 
-def macroscore(request, paper):
-    ratings = request.dbsession.query(UserPaperRating).filter_by(paper=paper).all()
-    if len(ratings) > 0:
-        score = sum(map(lambda x: x.rating, ratings)) / float(len(ratings))
-    else:
-        score = 0
-    return score
-
-
 def tipscore(request, paper):
     return request.dbsession.query(Tip).filter_by(paper=paper).count()
 
@@ -58,7 +49,7 @@ def paper_cell(request, paper):
     """
 
     args = paper_for_paper_cell(paper)
-    args['macroscore'] = macroscore(request, paper)
+    args['macroscore'] = round(paper.rating[0].value, 3)
     args['tipscore'] = tipscore(request, paper)
     args['userscore'] = userscore(request, paper)
     args['tags'] = tags_for_paper_cell(request, paper)

@@ -26,10 +26,11 @@ class UserPaperRating(Base):
     creator = relationship('User', backref='created_user_paper_ratings')
     paper = relationship('Paper', backref='created_user_paper_ratings')
 
+    def __init__(self, *args, **kwargs):
+        super(UserPaperRating, self).__init__(*args, **kwargs)
+        self.unique_name = 'ARXIVID_{}_USERNAME_{}'.format(self.paper.arxiv_id, self.creator.name)
+
     def set_rating(self, rating):
         rating = int(rating)
         assert rating >= 1 and rating <= 10
         self.rating = rating
-
-        # TODO: Is there a better place to put this?
-        self.unique_name = 'ARXIVID_{}_USERNAME_{}'.format(self.paper.arxiv_id, self.creator.name)

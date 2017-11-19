@@ -102,9 +102,20 @@ def edit_user_paper_rating(request):
     next_url = request.params.get('next', request.referrer)
     if not next_url:
         next_url = request.route_url('home')
+
+    paper = request.context.user_paper_rating.paper
+
+    # first delete
     user_paper_rating = request.context.user_paper_rating
+    request.dbsession.delete(user_paper_rating)
+    request.dbsession.flush() # TODO: Dirty hack.
+
+    # then create
     rating = request.matchdict['rating']
-    user_paper_rating.rating = rating
+    user_paper_rating = UserPaperRating(creator=request.user, paper=paper)
+    user_paper_rating.set_rating(rating)
+    request.dbsession.add(user_paper_rating)
+
     return HTTPFound(location=next_url)
 
 @view_config(route_name='delete_user_paper_rating', permission='edit')

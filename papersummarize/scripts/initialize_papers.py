@@ -120,7 +120,9 @@ def main(argv=sys.argv):
                     added += 1
                 else:
                     existed += 1
-            except:
+            except Exception as e:
+                # import ipdb; ipdb.set_trace()
+                print(e)
                 skipped += 1
     print("Skipped: {} Existed: {} Added: {}".format(skipped, existed, added))
 

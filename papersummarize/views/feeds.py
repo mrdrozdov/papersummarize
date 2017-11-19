@@ -6,9 +6,11 @@ from pyramid.httpexceptions import HTTPFound, HTTPNotFound
 
 from pyramid.view import view_config
 
+from sqlalchemy import desc
+
 from .helpers.paper import paper_cell
 from ..shared import paper_utils
-from ..models import Paper
+from ..models import Paper, PaperRating
 from ..shared.url_parsing import parse_arxiv_url
 
 @view_config(route_name='new', renderer='../templates/home.jinja2')
@@ -52,7 +54,8 @@ def top(request):
     page = int(request.params.get('page', 0))
 
     query = request.dbsession.query(Paper)
-    query = query.order_by(Paper.rating.desc())
+    query = query.join(Paper.rating)
+    query = query.order_by(PaperRating.value.desc())
     query = query.limit(limit).offset(page*limit)
 
     papers = query.all()
