@@ -106,15 +106,15 @@ def edit_user_paper_rating(request):
     paper = request.context.user_paper_rating.paper
 
     # first delete
+    rating = request.matchdict['rating']
     user_paper_rating = request.context.user_paper_rating
-    request.dbsession.delete(user_paper_rating)
-    request.dbsession.flush() # TODO: Dirty hack.
+    user_paper_rating.set_rating(rating)
+    # request.dbsession.delete(user_paper_rating)
+    # request.dbsession.flush() # TODO: Dirty hack.
 
     # then create
-    rating = request.matchdict['rating']
-    user_paper_rating = UserPaperRating(creator=request.user, paper=paper)
-    user_paper_rating.set_rating(rating)
-    request.dbsession.add(user_paper_rating)
+    # user_paper_rating = UserPaperRating(creator=request.user, paper=paper)
+    # request.dbsession.add(user_paper_rating)
 
     return HTTPFound(location=next_url)
 

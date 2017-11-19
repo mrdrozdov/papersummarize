@@ -107,17 +107,11 @@ def score(total, count):
 
 
 # TODO: Very inefficient...
-def increase_value(paper_rating, user_paper_ratings):
+def update_value(paper_rating, user_paper_ratings):
     total = sum(map(lambda x: x.rating, user_paper_ratings))
     paper_rating.count = len(user_paper_ratings)
     paper_rating.value = score(total, paper_rating.count)
-
-
-# TODO: Very inefficient...
-def decrease_value(paper_rating, user_paper_ratings, user_paper_rating_to_remove):
-    paper_rating.count = len(user_paper_ratings) - 1
     if paper_rating.count > 0:
-        total = sum(map(lambda x: x.rating, user_paper_ratings)) - user_paper_rating_to_remove.rating
         paper_rating.value = score(total, paper_rating.count)
     else:
         paper_rating.value = 0.
@@ -139,7 +133,17 @@ def receive_after_insert(mapper, connection, target):
     def receive_before_commit(session):
         paper_rating = session.query(PaperRating).filter_by(paper_id=target.paper_id).first()
         user_paper_ratings = session.query(UserPaperRating).filter_by(paper_id=target.paper_id).all()
-        increase_value(paper_rating, user_paper_ratings)
+        update_value(paper_rating, user_paper_ratings)
+
+
+@event.listens_for(UserPaperRating, 'after_update')
+def receive_after_update(mapper, connection, target):
+    """ listen for the 'after_update' event """
+    @event.listens_for(Session, "before_commit", once=True)
+    def receive_before_commit(session):
+        paper_rating = session.query(PaperRating).filter_by(paper_id=target.paper_id).first()
+        user_paper_ratings = session.query(UserPaperRating).filter_by(paper_id=target.paper_id).all()
+        update_value(paper_rating, user_paper_ratings)
 
 
 @event.listens_for(UserPaperRating, 'after_delete')
@@ -149,4 +153,4 @@ def receive_after_delete(mapper, connection, target):
     def receive_before_commit(session):
         paper_rating = session.query(PaperRating).filter_by(paper_id=target.paper_id).first()
         user_paper_ratings = session.query(UserPaperRating).filter_by(paper_id=target.paper_id).all()
-        decrease_value(paper_rating, user_paper_ratings, target)
+        update_value(paper_rating, user_paper_ratings)
