@@ -58,10 +58,15 @@ def main(argv=sys.argv):
                 u = {k: v for k, v in zip(header, line)}
                 users.append(u)
 
-        for u in users:
-            new_user = User(name=u['name'], role='editor')
-            new_user.set_password(u['password'])
-            dbsession.add(new_user)
+        added = 0
 
-        print("Added {} users.".format(len(users)))
+        for u in users:
+            name = u['name']
+            if dbsession.query(User).filter_by(name=name).count() == 0:
+                new_user = User(name=name, role='editor')
+                new_user.set_password(u['password'])
+                dbsession.add(new_user)
+                added += 1
+
+        print("Added {} users. Skipped {}.".format(added, len(users) - added))
             
