@@ -11,24 +11,40 @@ from pyramid.view import (
 from ..models import User
 
 
-@view_config(route_name='login', renderer='../templates/login.jinja2')
+@view_config(route_name='login', renderer='../templates/auth.jinja2')
 def login(request):
     next_url = request.params.get('next', request.referrer)
     if not next_url:
         next_url = request.route_url('home')
-    message = ''
+    login_message = ''
+    register_message = ''
     login = ''
-    if 'form.submitted' in request.params:
+    if 'form.submitted.login' in request.params:
         login = request.params['login']
         password = request.params['password']
         user = request.dbsession.query(User).filter_by(name=login).first()
         if user is not None and user.check_password(password):
             headers = remember(request, user.id)
             return HTTPFound(location=next_url, headers=headers)
-        message = 'Failed login'
+        login_message = 'Failed login'
+    elif 'form.submitted.register' in request.params:
+        login = request.params['login']
+        password = request.params['password']
+        if len(login) <= 3:
+            register_message = 'Login name is too short'
+        elif request.dbsession.query(User).filter_by(name=login).count() > 0:
+            register_message = 'Login name already exists'
+        else:
+            user = User(name=login, role='editor')
+            user.set_password(password)
+            request.dbsession.add(user)
+            request.dbsession.flush() # TODO: Dirty hack.
+            headers = remember(request, user.id)
+            return HTTPFound(location=next_url, headers=headers)
 
     return dict(
-        message=message,
+        login_message=login_message,
+        register_message=register_message,
         url=request.route_url('login'),
         next_url=next_url,
         login=login,
