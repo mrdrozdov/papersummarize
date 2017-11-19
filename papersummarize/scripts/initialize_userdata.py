@@ -48,7 +48,7 @@ def main(argv=sys.argv):
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
 
-	with open(settings['default.users']) as f:
+        with open(settings['default.users']) as f:
             users = []
             for i, line in enumerate(f):
                 line = line.strip().split(',')
@@ -62,4 +62,6 @@ def main(argv=sys.argv):
             new_user = User(name=u['name'], role='editor')
             new_user.set_password(u['password'])
             dbsession.add(new_user)
+
+        print("Added {} users.".format(len(users)))
             

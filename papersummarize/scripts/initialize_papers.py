@@ -2,7 +2,7 @@ import os
 import sys
 import json
 from datetime import datetime
-import cPickle as pickle
+import pickle
 import transaction
 
 from pyramid.paster import (
@@ -98,7 +98,7 @@ def main(argv=sys.argv):
 
     filename = settings['initdb.papers']
     raw_papers = pickle.load(open(filename, 'rb'))
-    papers = map(ArxivPaper, raw_papers.values())
+    papers = list(map(ArxivPaper, raw_papers.values()))
     
     some_paper = paper_utils.stub_paper(arxiv_id=paper_utils.some_paper_id)
     other_paper = paper_utils.stub_paper(arxiv_id=paper_utils.other_paper_id)

@@ -4,8 +4,8 @@ ENUM_User_standing = dict(
     bad_standing=2)
 
 ENUM_User_is_leader = dict(
-    False=0,
-    True=1)
+    false=0,
+    frue=1)
 
 ENUM_Summary_review_status = dict(
     under_review=0,
