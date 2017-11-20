@@ -4,7 +4,7 @@
     </div>
     <div class="paper-cell-middle col-xs-10">
         <div class="paper-cell-title">
-            <a href="{{ request.route_url('view_paper', arxiv_id=paper.arxiv_id) }}">{{ paper.title }}</a> ({{ paper.formatted_date }})
+            <a href="{{ request.route_url('view_paper', arxiv_id=paper.arxiv_id) }}">{{ paper.title }}</a> <a href="https://arxiv.org/abs/{{ paper.arxiv_id }}">({{ paper.formatted_date }})</a>
         </div>
         <div class="paper-cell-authors">
                 {% for author in paper.authors %}
