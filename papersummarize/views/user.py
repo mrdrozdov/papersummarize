@@ -13,7 +13,7 @@ from ..shared.url_parsing import parse_arxiv_url
 
 def most_recent(cls, user, page, limit):
     return request.dbsession.query(cls)\
-            .filter_by(creator=user)
+            .filter_by(creator=user)\
             .order_by(cls.created_at.desc())\
             .limit(limit)\
             .offset(page*limit)\
@@ -75,7 +75,7 @@ def view_user_taglist(request):
 
     tag_name = request.matchdict['tag_name']
     tags = request.dbsession.query(Tag)\
-            .filter_by(creator=user, name=tag_name)
+            .filter_by(creator=user, name=tag_name)\
             .order_by(Tag.created_at.desc())\
             .limit(limit)\
             .offset(page*limit)\
