@@ -8,6 +8,7 @@ from sqlalchemy import (
     DateTime,
 )
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm import object_session
 
 from .meta import Base
 
@@ -27,4 +28,10 @@ class Tag(Base):
 
     def set_name(self, name):
         self.name = name
-        self.unique_name = 'ARXIVID_{}_USERNAME_{}_TAGNAME_{}'.format(self.paper.arxiv_id, self.creator.name, name)
+        unique_name = 'ARXIVID_{}_USERNAME_{}_TAGNAME_{}'.format(self.paper.arxiv_id, self.creator.name, name)
+
+        if object_session(self).query(Tag).filter_by(unique_name=unique_name).first() is not None:
+            raise ValueError("Tag with unique_name='{}' already exists.".format(unique_name))
+
+        self.unique_name = unique_name
+
