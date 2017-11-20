@@ -11,4 +11,18 @@
 {% include('./custom_cells/paper_cell.jinja2') %}
 {% endfor %}
 
+<div class="footer row" style="margin-bottom: 50px; background-color: white; padding: 10px;">
+<div class="col-xs-4 text-left">
+<span style="margin-left: 20px;">
+<a href="{{ request.route_url('view_user_taglist', user_name=request.matchdict['user_name'], tag_name=request.matchdict['tag_name'] _query={'page': query.page_prev, 'limit': query.limit_prev) }}">prev</a>
+<span>
+</div>
+<div class="col-xs-4 text-center"></div>
+<div class="col-xs-4 text-right">
+<span style="margin-right: 20px;">
+<a href="{{ request.route_url('view_user_taglist', user_name=request.matchdict['user_name'], tag_name=request.matchdict['tag_name'] _query={'page': query.page_next, 'limit': query.limit_next) }}">next</a>
+</span>
+</div>
+</div>
+
 {% endblock content %}
