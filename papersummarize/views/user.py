@@ -11,8 +11,8 @@ from ..models import Tag, Tip, Paper, UserPaperRating
 from ..shared import paper_utils
 from ..shared.url_parsing import parse_arxiv_url
 
-def most_recent(cls, user, page, limit):
-    return request.dbsession.query(cls)\
+def most_recent(cls, session, user, page, limit):
+    return session.query(cls)\
             .filter_by(creator=user)\
             .order_by(cls.created_at.desc())\
             .limit(limit)\
@@ -32,9 +32,9 @@ def view_user_activity(request):
     limit = min(int(request.params.get('limit', 30)), 100)
     page = int(request.params.get('page', 0))
 
-    tips = most_recent(Tip, user, page, limit)
-    tags = most_recent(Tag, user, page, limit)
-    user_paper_ratings = most_recent(UserPaperRating, user, page, limit)
+    tips = most_recent(Tip, request.dbsession, user, page, limit)
+    tags = most_recent(Tag, request.dbsession, user, page, limit)
+    user_paper_ratings = most_recent(UserPaperRating, request.dbsession, user, page, limit)
     activities = tips + tags + user_paper_ratings
     activities = reversed(sorted(activities, key=lambda x: x.created_at))
 
@@ -102,7 +102,7 @@ def view_user_paper_ratings(request):
     limit = min(int(request.params.get('limit', 30)), 100)
     page = int(request.params.get('page', 0))
 
-    ratings = most_recent(UserPaperRating, user, page, limit)
+    ratings = most_recent(UserPaperRating, request.dbsession, user, page, limit)
     papers = map(lambda x: x.paper, ratings)
 
     query_dict = dict(
