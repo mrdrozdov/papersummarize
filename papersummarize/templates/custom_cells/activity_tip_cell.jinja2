@@ -1,0 +1,1 @@
+<li>[{{item.created_at}}] <a href="{{ request.route_url('view_user', user_name=item.object.creator.name) }}">{{item.object.creator.name}}</a> created tip for <a href="{{ request.route_url('view_paper', arxiv_id=item.paper.arxiv_id) }}">{{ item.paper.title }}</a>.</li>

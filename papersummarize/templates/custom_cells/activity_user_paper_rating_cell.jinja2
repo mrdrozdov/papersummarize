@@ -1,0 +1,5 @@
+{% if request.user == item.object.creator %}
+    <li>[{{item.created_at}}] <a href="{{ request.route_url('view_user', user_name=item.object.creator.name) }}">{{item.object.creator.name}}</a> gave a <a href="{{request.route_url('view_user_paper_ratings', user_name=item.object.creator.name)}}">{{ item.object.rating }} rating</a> to <a href="{{ request.route_url('view_paper', arxiv_id=item.paper.arxiv_id) }}">{{ item.paper.title }}</a>.</li>
+{% else %}
+    <li>[{{item.created_at}}] <a href="{{ request.route_url('view_user', user_name=item.object.creator.name) }}">{{item.object.creator.name}}</a> gave a <a href="{{request.route_url('view_user_paper_ratings', user_name=item.object.creator.name)}}">rating</a> to <a href="{{ request.route_url('view_paper', arxiv_id=item.paper.arxiv_id) }}">{{ item.paper.title }}</a>.</li>
+{% endif %}

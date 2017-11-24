@@ -42,15 +42,14 @@ def view_user_activity(request):
         item = dict()
         item['created_at'] = a.created_at
         item['paper'] = a.paper
+        item['object'] = a
 
         if isinstance(a, Tip):
             item['type'] = 'tip'
         elif isinstance(a, Tag):
             item['type'] = 'tag'
-            item['tag'] = a
         elif isinstance(a, UserPaperRating):
             item['type'] = 'user_paper_rating'
-            item['user_paper_rating'] = a
         else:
             item['type'] = 'unknown'
 
