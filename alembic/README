@@ -1,0 +1,8 @@
+Generic single-database configuration.
+
+# 001 - Antique Backups
+
+If there is a database version older than 3b77ea5d33e0, then
+can specify it's location using ALEMBIC_ANTIQUE_001. It will
+automatically be loaded. This is the version that we started
+supporting database migrations through alembic.
