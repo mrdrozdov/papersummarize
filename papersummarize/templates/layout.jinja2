@@ -28,45 +28,38 @@
 
     <div class="starter-template">
       <div class="container main">
-        <div class="row" style="margin-bottom: 10px;">
+        <div class="row header">
           <div class="col-xs-8">
-            <div>
-              <span>
-                <a href="/">Paper Summarize</a>
-              </span>
-              <span style="margin-left: 5px; margin-right: 5px;">|</span>
-              <span>Research, in your own words.</span>
-            </div>
-            <div>
-              Built by <a href="https://twitter.com/mrdrozdov">@mrdrozdov</a>.
-            </div>
-            <div>
-              <a href="https://github.com/mrdrozdov/papersummarize">Contribute</a>.
-            </div>
+            <ul class="list-inline logo">
+              <li class="list-inline-item"><a href="/">Paper Summarize</a></li>
+              <li class="list-inline-item">Research, in your own words.</li>
+            </ul>
           </div>
           <div class="col-xs-4">
-            <div class="content">
+            <ul class="list-inline pull-right">
             {% if request.user is none %}
-            <span class="pull-right">
-            <a href="{{ request.route_url('login') }}">login</a>
-            </span>
+              <li class="list-inline-item">
+                <a href="{{ request.route_url('login') }}">login</a>
+              </li>
             {% else %}
-            <span class="pull-right">
-            <a href="{{ request.route_url('view_user', user_name=request.user.name) }}">{{request.user.name}}</a> | <a href="{{request.route_url('logout', _query={'next': request.url})}}">logout</a>
-            </span>
+              <li class="list-inline-item">
+                <a href="{{ request.route_url('view_user', user_name=request.user.name) }}">{{request.user.name}}</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="{{request.route_url('logout', _query={'next': request.url})}}">logout</a>
+              </li>
             {% endif %}
-            </div>
+            </ul>
           </div>
         </div>
         <div class="main-nav row" style="padding: 10px; background-color: white;">
           <div class="col-xs-12">
-            <span><a href="/">home</a></span>
-            <span class="nav-divider">|</span>
-            <span><a href="/new">new</a></span>
-            <span class="nav-divider">|</span>
-            <span><a href="/top">top</a></span>
-            <span class="nav-divider">|</span>
-            <span><a href="/tips">tips</a></span>
+            <ul class="list-inline feed-nav">
+              <li class="list-inline-item"><a href="/">home</a></li>
+              <li class="list-inline-item"><a href="/new">new</a></li>
+              <li class="list-inline-item"><a href="/top">top</a></li>
+              <li class="list-inline-item"><a href="/tips">tips</a></li>
+            </ul>
           </div>
         </div>
         <div class="row">

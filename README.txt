@@ -43,3 +43,7 @@ FAQ
 - Q: Where did this idea find inspiration?
 
     https://github.com/zakird/revsub
+
+- Q: Where is the theme from?
+
+    https://www.deviantart.com/
