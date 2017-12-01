@@ -150,9 +150,10 @@ a:hover, a:focus {
   color: #fff;
 }
 
-a.tag-close:hover,
-a.tag-close:focus {
-  background: transparent;
+a.nohover:hover,
+a.nohover:focus {
+  background: inherit;
+  color: inherit;
 }
 
 a {
